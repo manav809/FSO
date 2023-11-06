@@ -2,6 +2,14 @@ import Header from './components/Header'
 import { useState } from 'react'
 
 const Statistics = ({good, bad, neutral}) => {
+  if(good + bad + neutral === 0){
+    return (
+      <>
+        <Header text={'statistics'} />
+        <h3>no feedback</h3>
+      </>
+    )
+  }
   return (
     <>
       <Header text={'statistics'} />
@@ -26,6 +34,7 @@ const App = () => {
       <button onClick={() => setGood(good + 1)}>good</button>
       <button onClick={() => setNeutral(neutral + 1)}>neutral</button>
       <button onClick={() => setBad(bad + 1)}>bad</button>
+
       <Statistics good={good} bad={bad} neutral={neutral}/>
 
     </div>
