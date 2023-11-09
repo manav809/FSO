@@ -2,6 +2,7 @@ import { useState } from 'react'
 
 const App = () => {
   const [points, setPoints] = useState({0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0})
+  const [highestPoints, setHighestPoints] = useState(0) //key with highest
   const anecdotes = [
     'If it hurts, do it more often.',
     'Adding manpower to a late software project makes it later!',
@@ -19,12 +20,16 @@ const App = () => {
     const x = Math.floor(Math.random() * 8)
     setSelected(x)
   } 
-  
+  const calculateHighest = (obj) => {
+    const highest = Object.keys(obj).reduce((a, b) => obj[a] > obj[b] ? a : b);
+    setHighestPoints(highest)
+  }
   const handleVote = () => {
     const voteIncrement = {...points}
     voteIncrement[selected] += 1
     console.log(voteIncrement)
     setPoints(voteIncrement)
+    calculateHighest(voteIncrement);
   }
 
   return (
@@ -34,8 +39,8 @@ const App = () => {
       <button onClick={handleVote}>vote</button>
       <button onClick={handleClick}>next anecdote</button>
       <p>Anecdote with most votes</p>
-      <p>{}</p>
-      <p>has {} votes</p>
+      <p>{anecdotes[highestPoints]}</p>
+      <p>has {points[highestPoints]} votes</p>
     </div>
   )
 }
