@@ -23,6 +23,7 @@ const App = () => {
   const handleVote = () => {
     const voteIncrement = {...points}
     voteIncrement[selected] += 1
+    console.log(voteIncrement)
     setPoints(voteIncrement)
   }
 
@@ -32,6 +33,9 @@ const App = () => {
       <p>has {points[selected]} votes</p>
       <button onClick={handleVote}>vote</button>
       <button onClick={handleClick}>next anecdote</button>
+      <p>Anecdote with most votes</p>
+      <p>{}</p>
+      <p>has {} votes</p>
     </div>
   )
 }
