@@ -32,4 +32,5 @@ var isDog = function(animal){
 }
 
 var dogs = animals.filter(isDog);//ARRAY WITH DOGS
-var otherAnimals = animals.reject(isDog);//ARRAY WITHOUT DOGS
+console.log(dogs)
+// var otherAnimals = animals.reject(isDog);//ARRAY WITHOUT DOGS
