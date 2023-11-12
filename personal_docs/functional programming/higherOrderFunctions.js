@@ -25,3 +25,11 @@ for(var i = 0; i < animals.length; i++){
 var dogs = animals.filter(function(animal){
     return animal.species === 'dog'
 })
+//filter runs a loop and performs the inner function logic and arrifies as we move on
+
+var isDog = function(animal){
+    return animal.species === 'dog'
+}
+
+var dogs = animals.filter(isDog);//ARRAY WITH DOGS
+var otherAnimals = animals.reject(isDog);//ARRAY WITHOUT DOGS
