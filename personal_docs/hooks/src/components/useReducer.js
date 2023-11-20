@@ -1,7 +1,30 @@
-import React from 'react'
+import React, { useState } from "react";
 
 const ReducerTutorial = () => {
-    return <div>Hello</div>
+  const [count, setCount] = useState(0);
+  const [showText, setShowText] = useState(true);
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+      }}
+    >
+      <div style={{ flexDirection: "column" }}>
+        <h1>{count}</h1>
+        <button
+          onClick={() => {
+            setCount(count + 1);
+            setShowText(!showText);
+          }}
+        >
+          Click Here
+        </button>
+        {showText && <p>This is a text</p>}
+      </div>
+    </div>
+  );
 };
 
-export default ReducerTutorial
+export default ReducerTutorial;
