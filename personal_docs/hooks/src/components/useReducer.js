@@ -17,24 +17,17 @@ const ReducerTutorial = () => {
   });
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-      }}
-    >
-      <div style={{ flexDirection: "column" }}>
-        <h1>{state.count}</h1>
-        <button
-          onClick={() => {
-            dispatch({type: "INCREMENT"})
-            dispatch({type: "TOGGLE"})
-          }}
-        >
-          Click Here
-        </button>
-        {state.showText && <p>This is a text</p>}
-      </div>
+    <div style={{ flexDirection: "column" }}>
+      <h1>{state.count}</h1>
+      <button
+        onClick={() => {
+          dispatch({ type: "INCREMENT" });
+          dispatch({ type: "TOGGLE" });
+        }}
+      >
+        Click Here
+      </button>
+      {state.showText && <p>This is a text</p>}
     </div>
   );
 };

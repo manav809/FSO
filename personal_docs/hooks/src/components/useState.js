@@ -9,21 +9,15 @@ const StateTutorial = () => {
     setCounter(count);
   };
   const assign = (event) => {
-    const value = event.target.value
+    const value = event.target.value;
     setInputValue(value);
-  }
+  };
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignContent: "center",
-      }}
-    >
+    <>
       {counter} <button onClick={increment}>Increment</button>
-
-      <input placeholder='enter something' onChange={assign}/>{inputValue}
-    </div>
+      <input placeholder="enter something" onChange={assign} />
+      {inputValue}
+    </>
   );
 };
 
