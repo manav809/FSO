@@ -1,7 +1,14 @@
-import React from 'react'
+import React, {useRef} from "react";
+import Button from "./helpers/Button";
 
 const ImperativeHandleTutorial = () => {
-    return <div>Hello</div>
+  const toggleRef = useRef(null);
+  return (
+    <div>
+      <button onClick={() => {toggleRef.current.alterToggle()}}>Button from Parent</button>
+      <Button ref={toggleRef}/>
+    </div>
+  );
 };
 
-export default ImperativeHandleTutorial
+export default ImperativeHandleTutorial;
