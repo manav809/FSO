@@ -1,7 +1,13 @@
-import React from 'react'
-
+import React, { useState } from "react";
+import Login from "./helpers/Login";
+import User from './helpers/User'
 const ContextTutorial = () => {
-    return <div>Hello</div>
+  const [userName, setUserName] = useState("");
+  return (
+    <div>
+      <Login setUsername={setUserName} /> <User userName={userName} />
+    </div>
+  );
 };
 
-export default ContextTutorial
+export default ContextTutorial;
