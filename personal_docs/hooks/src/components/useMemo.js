@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 
 //useMemo is used so that high computed tasks dont have to be redone upon rerendering
@@ -7,6 +7,7 @@ import axios from "axios";
 const MemoTutorial = () => {
   const [data, setData] = useState(null);
   const [toggle, setToggle] = useState(false);
+
   useEffect(() => {
     axios
       .get("https://jsonplaceholder.typicode.com/comments")
@@ -14,6 +15,7 @@ const MemoTutorial = () => {
         setData(response.data);
       });
   }, []);
+
   const findLongestName = (comments) => {
     if (!comments) return null;
     let longestName = "";
@@ -26,9 +28,12 @@ const MemoTutorial = () => {
     console.log("Computed!!!");
     return longestName;
   };
+
+  const getLongestName = useMemo(() => findLongestName(data), [data]);
+
   return (
     <div>
-      <div>{findLongestName(data)}</div>
+      <div>{getLongestName}</div>
       <button onClick={() => setToggle(!toggle)}>toggle</button>
       {toggle && <h1>Toggle</h1>}
     </div>
