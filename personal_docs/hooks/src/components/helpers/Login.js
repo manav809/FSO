@@ -1,9 +1,14 @@
-import React  from "react";
+import React, { useContext } from "react";
+import { AppContext } from "../useContext";
+const Login = () => {
+  const { setUserName } = useContext(AppContext);
+  return (
+    <input
+      onChange={(event) => {
+        setUserName(event.target.value);
+      }}
+    />
+  );
+};
 
-const Login = (props) => {
-    return (
-        <input onChange = {(event) => {props.setUsername(event.target.value)}} />
-    )
-}
-
-export default Login
+export default Login;

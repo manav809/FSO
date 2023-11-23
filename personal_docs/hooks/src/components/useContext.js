@@ -1,11 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, createContext } from "react";
 import Login from "./helpers/Login";
-import User from './helpers/User'
+import User from "./helpers/User";
+
+export const AppContext = createContext(null);
+
 const ContextTutorial = () => {
   const [userName, setUserName] = useState("");
   return (
     <div>
-      <Login setUsername={setUserName} /> <User userName={userName} />
+      <AppContext.Provider value={{setUserName, userName}}>
+        <Login /> <User />
+      </AppContext.Provider>
     </div>
   );
 };

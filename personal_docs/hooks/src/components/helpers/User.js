@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useContext } from "react";
+import { AppContext } from "../useContext";
 
-const User = (props) => {
-    return (
-        <div>User: {props.userName}</div> 
-    )
-}
+const User = () => {
+  const { userName } = useContext(AppContext);
+  return <div>User: {userName}</div>;
+};
 export default User;
