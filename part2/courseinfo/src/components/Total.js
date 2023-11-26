@@ -1,4 +1,5 @@
 const Total = ({ parts }) => {
+  //example of reduce
   const sum = parts.reduce(
     (accumulator, currentValue) => accumulator + currentValue.exercises,
     0
