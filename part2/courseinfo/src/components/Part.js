@@ -1,7 +1,7 @@
-const Part = (props) => {
+const Part = ({part, excercise}) => {
     return (
         <>
-            <p>{props.part} {props.excercise}</p>
+            <p>{part} {excercise}</p>
         </>
     )
 }
