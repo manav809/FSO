@@ -18,13 +18,11 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>
-        <Filter
-          setSearch={setSearch}
-          setSearchedPersons={setSearchedPersons}
-          persons={persons}
-        />
-      </div>
+      <Filter
+        setSearch={setSearch}
+        setSearchedPersons={setSearchedPersons}
+        persons={persons}
+      />
       <h2>add a new</h2>
       <PersonForm
         setNewName={setNewName}
