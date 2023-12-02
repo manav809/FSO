@@ -23,12 +23,14 @@ const App = () => {
     event.preventDefault();
     console.log("button clicked", event.target);
     const noteObject = {
-      id: notes.length + 1,
       content: newNote,
       important: Math.random() < 0.5,
     };
-    setNotes(notes.concat(noteObject));
-    setNewNote("");
+    axios.post("http://localhost:3001/notes", noteObject).then((response) => {
+      console.log(response);
+      setNotes(notes.concat(noteObject));
+      setNewNote("");
+    });
   };
 
   const handleNoteChange = (event) => {
