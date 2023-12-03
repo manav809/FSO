@@ -8,6 +8,6 @@ const event = new Promise((resolve, reject) => {
 });
 
 event
-  .then((name) => console.log(name))
-  .catch((err) => console.log(err))
+  .then((name) => console.log(name)) //this is the resolve
+  .catch((err) => console.log(err)) //this is the reject
   .finally(() => console.log("Promise Finished"));

@@ -14,7 +14,7 @@ const App = () => {
     const note = notes.find((note) => note.id === id);
     const changedNote = { ...note, important: !note.important };
     axios.put(url, changedNote).then((response) => {
-      setNotes(notes.map((n) => (n.id != id ? n : response.data)));
+      setNotes(notes.map((n) => (n.id !== id ? n : response.data)));
     });
 
   };
