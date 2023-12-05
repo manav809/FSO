@@ -12,10 +12,9 @@ const App = () => {
 
     const note = notes.find((note) => note.id === id);
     const changedNote = { ...note, important: !note.important };
-    notesService.update(id, changedNote).then((response) => {
-      setNotes(notes.map((n) => (n.id !== id ? n : response.data)));
+    notesService.update(id, changedNote).then((upDatedNote) => {
+      setNotes(notes.map((n) => (n.id !== id ? n : upDatedNote)));
     });
-
   };
 
   const notesToShow = showAll
@@ -24,9 +23,9 @@ const App = () => {
 
   useEffect(() => {
     console.log("effect");
-    notesService.getAll().then((response) => {
+    notesService.getAll().then((initialNotes) => {
       console.log("promise fulfilled");
-      setNotes(response.data);
+      setNotes(initialNotes);
     });
   }, []);
 
@@ -38,9 +37,8 @@ const App = () => {
       content: newNote,
       important: Math.random() < 0.5,
     };
-    notesService.create(noteObject).then((response) => {
-      console.log(response);
-      setNotes(notes.concat(noteObject));
+    notesService.create(noteObject).then((createdNote) => {
+      setNotes(notes.concat(createdNote));
       setNewNote("");
     });
   };
