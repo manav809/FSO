@@ -15,6 +15,6 @@ const update = (id, newObject) => {
   const request = axios.put(`${baseUrl}/${id}`, newObject);
   return request.then((response) => response.data)
 };
-const service = { getAll: getAll, create: create, update: update };
+const service = { getAll, create, update };
 
 export default service;
