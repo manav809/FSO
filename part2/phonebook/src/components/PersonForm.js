@@ -26,7 +26,7 @@ const PersonForm = ({
         alert(`${newName} is already added to phonebook`);
       }
       if (i === persons.length - 1 && persons[i].name !== newName) {
-        const request = axios
+        axios
           .post("http://localhost:3001/persons", newPerson)
           .then((response) => setPersons(persons.concat(response.data)));
       }
