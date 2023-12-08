@@ -1,4 +1,3 @@
-import axios from "axios";
 import phonenumberService from "../services/phonenumbers";
 const PersonForm = ({
   setNewName,
@@ -19,13 +18,13 @@ const PersonForm = ({
     const newPerson = {
       name: newName,
       number: phoneNumber,
-      id: persons.length + 1,
     };
     for (let i = 0; i < persons.length; i++) {
       if (persons[i].name === newName) {
         alert(`${newName} is already added to phonebook`);
       }
       if (i === persons.length - 1 && persons[i].name !== newName) {
+        console.log("helo");
         phonenumberService
           .create(newPerson)
           .then((person) => setPersons(persons.concat(person)));

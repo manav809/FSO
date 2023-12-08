@@ -11,6 +11,9 @@ const create = (newObject) => {
   return request.then((response) => response.data);
 };
 
-const service = { getAll, create };
+const deleteEntry = (id) => {
+    axios.delete(`${baseUrl}/${id}`);
+}
+const service = { getAll, create, deleteEntry };
 
 export default service;

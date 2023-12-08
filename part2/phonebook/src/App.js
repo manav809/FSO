@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
-import phonebookService from './services/phonenumbers'
+import phonebookService from "./services/phonenumbers";
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [searchedPersons, setSearchedPersons] = useState([]);
@@ -15,7 +15,7 @@ const App = () => {
       setPersons(entries);
     });
   }, []);
-  
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -38,6 +38,7 @@ const App = () => {
         search={search}
         searchedPersons={searchedPersons}
         persons={persons}
+        setPersons={setPersons}
       />
     </div>
   );
