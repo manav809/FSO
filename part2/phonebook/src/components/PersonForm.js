@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import phonenumberService from "../services/phonenumbers";
 const PersonForm = ({
   setNewName,
   setPersons,
@@ -26,9 +26,9 @@ const PersonForm = ({
         alert(`${newName} is already added to phonebook`);
       }
       if (i === persons.length - 1 && persons[i].name !== newName) {
-        axios
-          .post("http://localhost:3001/persons", newPerson)
-          .then((response) => setPersons(persons.concat(response.data)));
+        phonenumberService
+          .create(newPerson)
+          .then((person) => setPersons(persons.concat(person)));
       }
     }
   };
