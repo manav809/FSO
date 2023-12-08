@@ -2,9 +2,10 @@ import phonenumberService from "../services/phonenumbers";
 
 const Persons = ({ searchedPersons, persons, search, setPersons }) => {
   const handleDelete = (person) => {
-    window.confirm(`Delete ${person.name}`);
-    phonenumberService.deleteEntry(person.id);
-    setPersons(persons.filter((p) => p.id !== person.id));
+    if(window.confirm(`Delete ${person.name}`)){
+      phonenumberService.deleteEntry(person.id);
+      setPersons(persons.filter((p) => p.id !== person.id));      
+    }
   };
   return (
     <>

@@ -21,7 +21,19 @@ const PersonForm = ({
     };
     for (let i = 0; i < persons.length; i++) {
       if (persons[i].name === newName) {
-        alert(`${newName} is already added to phonebook`);
+        if (window.confirm(`${newName} is already added to phonebook...Do you want to update?`)
+        ) {
+          const person = persons.find((person) => person.name === newName);
+          phonenumberService.update(person.id, newPerson).then((newPerson) => {
+            setPersons(
+              persons.map((p) => (p.id !== person.id ? p : newPerson))
+            );
+          });
+          return
+        }
+        else{
+          return
+        }
       }
       if (i === persons.length - 1 && persons[i].name !== newName) {
         console.log("helo");
