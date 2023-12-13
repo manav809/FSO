@@ -8,3 +8,7 @@ li {
     padding-top: 3px;
     font-size: x-large;
 }
+
+.note {
+    color: red;
+}
