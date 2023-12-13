@@ -6,6 +6,7 @@ const PersonForm = ({
   newName,
   phoneNumber,
   persons,
+  setAddedAlert,
 }) => {
   const handlePhoneNumberChange = (event) => {
     setPhoneNumber(event.target.value);
@@ -21,25 +22,31 @@ const PersonForm = ({
     };
     for (let i = 0; i < persons.length; i++) {
       if (persons[i].name === newName) {
-        if (window.confirm(`${newName} is already added to phonebook...Do you want to update?`)
+        if (
+          window.confirm(
+            `${newName} is already added to phonebook...Do you want to update?`
+          )
         ) {
           const person = persons.find((person) => person.name === newName);
           phonenumberService.update(person.id, newPerson).then((newPerson) => {
             setPersons(
               persons.map((p) => (p.id !== person.id ? p : newPerson))
             );
+            setAddedAlert(`Updated ${person.name}`);
+            setTimeout(() => {
+              setAddedAlert(null);
+            }, 5000);
           });
-          return
-        }
-        else{
-          return
+          return;
+        } else {
+          return;
         }
       }
       if (i === persons.length - 1 && persons[i].name !== newName) {
         console.log("helo");
-        phonenumberService
-          .create(newPerson)
-          .then((person) => setPersons(persons.concat(person)));
+        phonenumberService.create(newPerson).then((person) => {
+          setPersons(persons.concat(person));
+        });
       }
     }
   };
