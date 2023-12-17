@@ -1,6 +1,6 @@
-const Notification = ({ notification, type }) => {
+const Notification = ({ notification, alertColor }) => {
   return (
-    <div className='added'>
+    <div className={alertColor === 'added' ? 'added' : 'deleted'}>
       <h3>{notification}</h3>
     </div>
   );

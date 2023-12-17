@@ -7,6 +7,7 @@ const PersonForm = ({
   phoneNumber,
   persons,
   setAddedAlert,
+  setAlertColor,
 }) => {
   const handlePhoneNumberChange = (event) => {
     setPhoneNumber(event.target.value);
@@ -35,12 +36,14 @@ const PersonForm = ({
                 persons.map((p) => (p.id !== person.id ? p : newPerson))
               );
               setAddedAlert(`Updated ${person.name}`);
+              setAlertColor("added");
               setTimeout(() => {
                 setAddedAlert(null);
               }, 5000);
             })
             .catch(() => {
               setAddedAlert(`${newName} was deleted`);
+              setAlertColor("deleted");
               setTimeout(() => {
                 setAddedAlert(null);
               }, 5000);
@@ -54,6 +57,11 @@ const PersonForm = ({
         console.log("helo");
         phonenumberService.create(newPerson).then((person) => {
           setPersons(persons.concat(person));
+          setAddedAlert(`Added ${person.name}`);
+          setAlertColor("added");
+          setTimeout(() => {
+            setAddedAlert(null);
+          }, 5000);
         });
       }
     }

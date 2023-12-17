@@ -12,6 +12,7 @@ const App = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [search, setSearch] = useState("");
   const [addedAlert, setAddedAlert] = useState(null);
+  const [alertColor, setAlertColor] = useState('')
 
   useEffect(() => {
     phonebookService.getAll().then((entries) => {
@@ -22,7 +23,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      {addedAlert ? <Notification notification={addedAlert} /> : <></>}
+      {addedAlert ? <Notification notification={addedAlert} alertColor={alertColor}/> : <></>}
       <Filter
         setSearch={setSearch}
         setSearchedPersons={setSearchedPersons}
@@ -37,6 +38,7 @@ const App = () => {
         setPersons={setPersons}
         persons={persons}
         setAddedAlert={setAddedAlert}
+        setAlertColor={setAlertColor}
       />
       <h2>Numbers</h2>
       <Persons
