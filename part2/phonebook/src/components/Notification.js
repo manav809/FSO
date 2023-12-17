@@ -1,6 +1,6 @@
-const Notification = ({ notification }) => {
+const Notification = ({ notification, type }) => {
   return (
-    <div className='notification'>
+    <div className='added'>
       <h3>{notification}</h3>
     </div>
   );

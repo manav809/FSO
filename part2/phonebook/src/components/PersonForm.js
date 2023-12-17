@@ -28,15 +28,23 @@ const PersonForm = ({
           )
         ) {
           const person = persons.find((person) => person.name === newName);
-          phonenumberService.update(person.id, newPerson).then((newPerson) => {
-            setPersons(
-              persons.map((p) => (p.id !== person.id ? p : newPerson))
-            );
-            setAddedAlert(`Updated ${person.name}`);
-            setTimeout(() => {
-              setAddedAlert(null);
-            }, 5000);
-          });
+          phonenumberService
+            .update(person.id, newPerson)
+            .then((newPerson) => {
+              setPersons(
+                persons.map((p) => (p.id !== person.id ? p : newPerson))
+              );
+              setAddedAlert(`Updated ${person.name}`);
+              setTimeout(() => {
+                setAddedAlert(null);
+              }, 5000);
+            })
+            .catch(() => {
+              setAddedAlert(`${newName} was deleted`);
+              setTimeout(() => {
+                setAddedAlert(null);
+              }, 5000);
+            });
           return;
         } else {
           return;
