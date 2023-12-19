@@ -4,7 +4,7 @@ import axios from "axios";
 const Currency = () => {
   const styles = {
     currency: {
-      float: "left",
+      float: "right",
     },
   };
 
@@ -37,6 +37,7 @@ const Currency = () => {
 
   return (
     <div style={styles.currency}>
+      <h1>Currency Wiki</h1>
       <form onSubmit={onSearch}>
         currency: <input value={value} onChange={handleChange} />
         <button type="submit">exchange rate</button>

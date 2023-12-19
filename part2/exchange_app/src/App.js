@@ -4,8 +4,8 @@ import Currency from "./views/Currency";
 const App = () => {
   return (
     <div>
-      <Currency />
       <Country />
+      <Currency />
     </div>
   );
 };
