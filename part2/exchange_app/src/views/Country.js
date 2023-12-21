@@ -8,6 +8,8 @@ const Country = () => {
   const [prediction, setPrediction] = useState([]);
 
   const [matchedCountry, setMatchedCountry] = useState({});
+
+  const [weather, setWeather] = useState({});
   const styles = {
     country: {
       float: "left",
@@ -34,6 +36,22 @@ const Country = () => {
           )
           .then((response) => {
             setMatchedCountry(response.data);
+            return response.data;
+          })
+          .then((country) => {
+            axios
+              .get("http://api.openweathermap.org/data/2.5/weather", {
+                params: {
+                  lat: country.latlng[0],
+                  lon: country.latlng[1],
+                  appid: process.env.REACT_APP_WEATHER_KEY,
+                  units: "imperial",
+                },
+              })
+              .then((response) => {
+                console.log(response.data);
+                setWeather(response.data);
+              });
           })
           .catch((err) => console.log(err))
       : setMatchedCountry({});
@@ -66,7 +84,9 @@ const Country = () => {
         prediction.map((country, i) => (
           <p key={i}>
             {country}{" "}
-            <button onClick={() => handleShowMore(country)}>show more</button>
+            <button onClick={() => handleShowMore(country)}>
+              show more
+            </button>
           </p>
         ))
       ) : Object.keys(matchedCountry).length > 0 ? (
@@ -84,6 +104,18 @@ const Country = () => {
           ))}
           <h3>Flag</h3>
           <img src={matchedCountry.flags["png"]} alt="flag" />
+          {Object.keys(weather).length > 0 ? (
+            <div>
+              <h2>Weather In {matchedCountry.capital[0]}</h2>
+              <p>temperature {weather.main.temp}</p>
+              <img
+                src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`} alt="weather-icon"
+              />
+              <p>wind {weather.wind.speed}</p>{" "}
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
       ) : (
         <p>Too many matches... please be specific</p>
