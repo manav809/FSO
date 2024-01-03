@@ -19,16 +19,20 @@ let notes = [
     important: true,
   },
 ];
+//Header to know that the request will be dealing with JSON
 app.use(express.json());
 
+//Root
 app.get("/", (req, res) => {
   res.send("<h1>Hello World</h1>");
 });
 
+//Get all Notes
 app.get("/api/notes", (req, res) => {
   res.json(notes);
 });
 
+//Get all Notes by Id
 app.get("/api/notes/:id", (req, res) => {
   const id = Number(req.params.id);
   const note = notes.find((note) => {
@@ -37,18 +41,30 @@ app.get("/api/notes/:id", (req, res) => {
   note ? res.json(note) : res.status(404).end();
 });
 
+//Delete a Note by ID
 app.delete("/api/notes/:id", (req, res) => {
   const id = Number(req.params.id);
   notes = notes.filter((note) => note.id !== id);
   res.send(204).end();
 });
 
-app.post("/api/notes", (req, res) => {
+const generateId = () => {
   const maxId = notes.length > 0 ? Math.max(...notes.map((n) => n.id)) : 0;
-  
-  const note = req.body;
-  note.id = maxId + 1
-  notes = notes.concat(note)
+  return maxId + 1;
+};
+//Add a Note
+app.post("/api/notes", (req, res) => {
+  const body = req.body;
+  if (!body.content) {
+    return res.status(400).json({ error: "Missing Content" });
+  }
+  const note = {
+    id: generateId(), 
+    content: body.content,
+    important: Boolean(body.important) || false
+  }
+
+  notes = notes.concat(note);
 
   res.json(note);
 });
@@ -58,4 +74,5 @@ const PORT = 3001;
 app.listen(PORT);
 
 console.log(`Server is running on port ${PORT}`);
+
 console.table(listEndpoints(app));
