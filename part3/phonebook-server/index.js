@@ -59,6 +59,12 @@ const generateId = () => {
 
 app.post("/api/persons", (req, res) => {
   const body = req.body;
+  !body.name || !body.number
+    ? res.status(400).json({ error: "Missing Content" })
+    : null;
+  persons.find((person) => person.name === body.name) != {}
+    ? res.status(400).json({ error: "Already Included" })
+    : null;
   const person = {
     id: generateId(),
     name: body.name,
