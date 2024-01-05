@@ -24,7 +24,7 @@ let persons = [
     number: "39-23-6423122",
   },
 ];
-
+app.use(express.json());
 app.get("/", (req, res) => {
   res.send("<h1>Hello World</h1>");
 });
@@ -46,8 +46,27 @@ app.get("/api/persons/:id", (req, res) => {
 app.delete("/api/persons/:id", (req, res) => {
   const id = Number(req.params.id);
   persons = persons.filter((person) => person.id !== id);
-  console.log(persons)
+  console.log(persons);
   res.send(204).end();
+});
+
+const generateId = () => {
+  const id = Math.floor(Math.random() * 111);
+  return id;
+  //const maxId = persons.length > 0 ? Math.max(...persons.map((person) => person.id)) : 0;
+  //return maxId + 1
+};
+
+app.post("/api/persons", (req, res) => {
+  const body = req.body;
+  const person = {
+    id: generateId(),
+    name: body.name,
+    number: body.number,
+  };
+  persons = persons.concat(person);
+
+  res.json(persons);
 });
 
 const PORT = 3001;
