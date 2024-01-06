@@ -19,6 +19,15 @@ let notes = [
     important: true,
   },
 ];
+const requestLogger = (req, res, next) => {
+  console.log("Method: ", req.method);
+  console.log("Path: ", req.path);
+  console.log("Body: ", req.body);
+  console.log("---");
+  next();
+};
+
+app.use(requestLogger);
 //Header to know that the request will be dealing with JSON
 app.use(express.json());
 
@@ -59,10 +68,10 @@ app.post("/api/notes", (req, res) => {
     return res.status(400).json({ error: "Missing Content" });
   }
   const note = {
-    id: generateId(), 
+    id: generateId(),
     content: body.content,
-    important: Boolean(body.important) || false
-  }
+    important: Boolean(body.important) || false,
+  };
 
   notes = notes.concat(note);
 
