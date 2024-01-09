@@ -1,5 +1,6 @@
 const express = require("express");
 const listEndpoints = require("express-list-endpoints");
+const morgan = require("morgan")
 const app = express();
 
 let persons = [
@@ -25,6 +26,20 @@ let persons = [
   },
 ];
 app.use(express.json());
+
+app.use(morgan('tiny'))
+
+morgan(function (tokens, req, res) {
+  return [
+    tokens.method(req, res),
+    tokens.url(req, res),
+    tokens.status(req, res),
+    tokens.res(req, res, 'content-length'), '-',
+    tokens['response-time'](req, res), 'ms'
+  ].join(' ')
+})
+
+
 app.get("/", (req, res) => {
   res.send("<h1>Hello World</h1>");
 });
