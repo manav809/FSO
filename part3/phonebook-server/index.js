@@ -1,6 +1,6 @@
 const express = require("express");
 const listEndpoints = require("express-list-endpoints");
-const morgan = require("morgan")
+const morgan = require("morgan");
 const app = express();
 
 let persons = [
@@ -27,18 +27,24 @@ let persons = [
 ];
 app.use(express.json());
 
-app.use(morgan('tiny'))
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms - :body'))
 
-morgan(function (tokens, req, res) {
-  return [
-    tokens.method(req, res),
-    tokens.url(req, res),
-    tokens.status(req, res),
-    tokens.res(req, res, 'content-length'), '-',
-    tokens['response-time'](req, res), 'ms'
-  ].join(' ')
+morgan.token('body', req => {
+  return JSON.stringify(req.body)
 })
 
+// morgan(function (tokens, req, res) {
+//   return [
+//     tokens.method(req, res),
+//     tokens.url(req, res),
+//     tokens.status(req, res),
+//     tokens.res(req, res, "content-length"),
+//     "-",
+//     tokens["response-time"](req, res),
+//     "ms",
+    
+//   ].join(" ");
+// });
 
 app.get("/", (req, res) => {
   res.send("<h1>Hello World</h1>");
@@ -66,20 +72,23 @@ app.delete("/api/persons/:id", (req, res) => {
 });
 
 const generateId = () => {
-  const id = Math.floor(Math.random() * 111);
-  return id;
-  //const maxId = persons.length > 0 ? Math.max(...persons.map((person) => person.id)) : 0;
-  //return maxId + 1
+  // const id = Math.floor(Math.random() * 111);
+  // return id;
+  const maxId =
+    persons.length > 0 ? Math.max(...persons.map((person) => person.id)) : 0;
+  return maxId + 1;
 };
 
 app.post("/api/persons", (req, res) => {
   const body = req.body;
-  !body.name || !body.number
-    ? res.status(400).json({ error: "Missing Content" })
-    : null;
-  persons.find((person) => person.name === body.name) != {}
-    ? res.status(400).json({ error: "Already Included" })
-    : null;
+  if (!body.name || !body.number) {
+    res.status(400).json({ error: "Missing Content" });
+    return;
+  }
+  if (persons.find((person) => person.name === body.name)) {
+    res.status(400).json({ error: "Already Included" });
+    return;
+  }
   const person = {
     id: generateId(),
     name: body.name,
