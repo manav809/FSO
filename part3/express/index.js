@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 const listEndpoints = require("express-list-endpoints");
+const cors = require("cors");
+app.use(cors());
 
 let notes = [
   {
