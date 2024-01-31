@@ -33,6 +33,7 @@ app.use(requestLogger);
 //Header to know that the request will be dealing with JSON
 app.use(express.json());
 
+app.use(express.static("build"));
 //Root
 app.get("/", (req, res) => {
   res.send("<h1>Hello World</h1>");
