@@ -80,7 +80,15 @@ app.post("/api/notes", (req, res) => {
 
   res.json(note);
 });
-
+app.put('/api/notes/:id', (req, res) => {
+  const body = req.body;
+  notes.map((note) => {
+    if (note.id === body.id){
+      note.important === body.important
+    }
+  })
+  res.json(body)
+})
 const PORT = 3001;
 
 app.listen(PORT);
