@@ -55,9 +55,9 @@ const PersonForm = ({
       }
       if (i === persons.length - 1 && persons[i].name !== newName) {
         console.log("helo");
-        phonenumberService.create(newPerson).then((person) => {
-          setPersons(persons.concat(person));
-          setAddedAlert(`Added ${person.name}`);
+        phonenumberService.create(newPerson).then(() => {
+          setPersons(persons.concat(newPerson));
+          setAddedAlert(`Added ${newPerson.name}`);
           setAlertColor("added");
           setTimeout(() => {
             setAddedAlert(null);

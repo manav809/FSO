@@ -3,6 +3,8 @@ const listEndpoints = require("express-list-endpoints");
 const morgan = require("morgan");
 const app = express();
 require('dotenv').config()
+const cors = require("cors");
+app.use(cors());
 
 let persons = [
   {
@@ -56,6 +58,7 @@ app.get("/info", (req, res) => {
 });
 
 app.get("/api/persons", (req, res) => {
+  console.log(persons);
   res.json(persons);
 });
 
@@ -83,11 +86,11 @@ const generateId = () => {
 app.post("/api/persons", (req, res) => {
   const body = req.body;
   if (!body.name || !body.number) {
-    res.status(400).json({ error: "Missing Content" });
+    res.sendStatus(400).json({ error: "Missing Content" });
     return;
   }
   if (persons.find((person) => person.name === body.name)) {
-    res.status(400).json({ error: "Already Included" });
+    res.sendStatus(400).json({ error: "Already Included" });
     return;
   }
   const person = {

@@ -15,6 +15,7 @@ const App = () => {
   const [alertColor, setAlertColor] = useState('')
 
   useEffect(() => {
+    console.log('Hello');
     phonebookService.getAll().then((entries) => {
       setPersons(entries);
     });
