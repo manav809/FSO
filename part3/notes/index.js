@@ -2,6 +2,29 @@ const express = require("express");
 const app = express();
 const listEndpoints = require("express-list-endpoints");
 const cors = require("cors");
+const mongoose = require("mongoose");
+
+const password = process.argv[3];
+const username = process.argv[2];
+
+const url = `mongodb+srv://${username}:${password}@cluster0.tfetw0a.mongodb.net/notes-data?retryWrites=true&w=majority`;
+
+mongoose.set("toJSON", {
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id.toString();
+    delete returnedObject._id;
+    delete returnedObject.__v;
+  },
+});
+mongoose.connect(url);
+
+const noteSchema = new mongoose.Schema({
+  content: String,
+  important: Boolean,
+});
+
+const Note = mongoose.model("Note", noteSchema);
+
 app.use(cors());
 
 let notes = [
@@ -41,7 +64,9 @@ app.get("/", (req, res) => {
 
 //Get all Notes
 app.get("/api/notes", (req, res) => {
-  res.json(notes);
+  Note.find({}).then((notes) => {
+    res.json(notes);
+  });
 });
 
 //Get all Notes by Id
@@ -80,15 +105,15 @@ app.post("/api/notes", (req, res) => {
 
   res.json(note);
 });
-app.put('/api/notes/:id', (req, res) => {
+app.put("/api/notes/:id", (req, res) => {
   const body = req.body;
   notes.map((note) => {
-    if (note.id === body.id){
-      note.important === body.important
+    if (note.id === body.id) {
+      note.important === body.important;
     }
-  })
-  res.json(body)
-})
+  });
+  res.json(body);
+});
 const PORT = 3001;
 
 app.listen(PORT);
