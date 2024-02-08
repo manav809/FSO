@@ -1,9 +1,8 @@
 const express = require("express");
 const listEndpoints = require("express-list-endpoints");
 const cors = require("cors");
-const mongoose = require("mongoose");
 require("dotenv").config();
-const Note = require("./models/note");
+const Notes = require("./models/note");
 const app = express();
 
 app.use(cors());
@@ -45,7 +44,7 @@ app.get("/", (req, res) => {
 
 //Get all Notes
 app.get("/api/notes", (req, res) => {
-  Note.find({}).then((notes) => {
+  Notes.find({}).then((notes) => {
     res.json(notes);
   });
 });
