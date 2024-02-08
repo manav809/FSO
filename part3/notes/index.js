@@ -1,29 +1,10 @@
 const express = require("express");
-const app = express();
 const listEndpoints = require("express-list-endpoints");
 const cors = require("cors");
 const mongoose = require("mongoose");
-
-const password = process.argv[3];
-const username = process.argv[2];
-
-const url = `mongodb+srv://${username}:${password}@cluster0.tfetw0a.mongodb.net/notes-data?retryWrites=true&w=majority`;
-
-mongoose.set("toJSON", {
-  transform: (document, returnedObject) => {
-    returnedObject.id = returnedObject._id.toString();
-    delete returnedObject._id;
-    delete returnedObject.__v;
-  },
-});
-mongoose.connect(url);
-
-const noteSchema = new mongoose.Schema({
-  content: String,
-  important: Boolean,
-});
-
-const Note = mongoose.model("Note", noteSchema);
+require("dotenv").config();
+const Note = require("./models/note");
+const app = express();
 
 app.use(cors());
 
