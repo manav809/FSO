@@ -4,7 +4,6 @@ const cors = require("cors");
 const morgan = require("morgan");
 
 const mongoose = require("mongoose");
-const { ObjectId } = require("mongodb");
 
 require("dotenv").config();
 
@@ -22,12 +21,11 @@ mongoose.connect(url);
 const personSchema = new mongoose.Schema({
   name: String,
   number: String,
-  id: Number,
 });
 
 personSchema.set("toJSON", {
   transform: (document, returnedObj) => {
-    returnedObj.ObjectId = returnedObj._id.toString();
+    returnedObj.id = returnedObj._id.toString();
     delete returnedObj._id;
     delete returnedObj.__v;
   },
@@ -35,28 +33,6 @@ personSchema.set("toJSON", {
 
 const Person = mongoose.model("Phonenumbers", personSchema);
 
-let persons = [
-  {
-    id: 1,
-    name: "Arto Hellas",
-    number: "040-123456",
-  },
-  {
-    id: 2,
-    name: "Ada Lovelace",
-    number: "39-44-5323523",
-  },
-  {
-    id: 3,
-    name: "Dan Abramov",
-    number: "12-43-234345",
-  },
-  {
-    id: 4,
-    name: "Mary Poppendieck",
-    number: "39-23-6423122",
-  },
-];
 app.use(express.json());
 
 app.use(
@@ -68,19 +44,6 @@ app.use(
 morgan.token("body", (req) => {
   return JSON.stringify(req.body);
 });
-
-// morgan(function (tokens, req, res) {
-//   return [
-//     tokens.method(req, res),
-//     tokens.url(req, res),
-//     tokens.status(req, res),
-//     tokens.res(req, res, "content-length"),
-//     "-",
-//     tokens["response-time"](req, res),
-//     "ms",
-
-//   ].join(" ");
-// });
 
 app.get("/", (req, res) => {
   res.send("<h1>Hello World</h1>");
@@ -97,25 +60,16 @@ app.get("/api/persons", (req, res) => {
 });
 
 app.get("/api/persons/:id", (req, res) => {
-  const id = Number(req.params.id);
-  const person = persons.find((person) => person.id === id);
-  person ? res.json(person) : res.status(404).end();
+  const id = req.params.id;
+  Person.findById(id)
+    .then((person) => res.json(person))
+    .catch((error) => res.sendStatus(404));
 });
 
 app.delete("/api/persons/:id", (req, res) => {
-  const id = Number(req.params.id);
-  persons = persons.filter((person) => person.id !== id);
-  console.log(persons);
-  res.send(204).end();
+  const id = req.params.id;
+  Person.deleteOne({ _id: id }).then(() => res.sendStatus(204));
 });
-
-const generateId = () => {
-  // const id = Math.floor(Math.random() * 111);
-  // return id;
-  const maxId =
-    persons.length > 0 ? Math.max(...persons.map((person) => person.id)) : 0;
-  return maxId + 1;
-};
 
 app.post("/api/persons", (req, res) => {
   const body = req.body;
@@ -123,18 +77,11 @@ app.post("/api/persons", (req, res) => {
     res.sendStatus(400).json({ error: "Missing Content" });
     return;
   }
-  if (persons.find((person) => person.name === body.name)) {
-    res.sendStatus(400).json({ error: "Already Included" });
-    return;
-  }
-  const person = {
-    id: generateId(),
+  const person = new Person({
     name: body.name,
     number: body.number,
-  };
-  persons = persons.concat(person);
-
-  res.json(persons);
+  });
+  person.save().then((saved) => res.json(saved));
 });
 
 const PORT = process.env.PORT || 3001;
