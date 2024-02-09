@@ -1,10 +1,39 @@
 const express = require("express");
 const listEndpoints = require("express-list-endpoints");
-const morgan = require("morgan");
-const app = express();
-require('dotenv').config()
 const cors = require("cors");
+const morgan = require("morgan");
+
+const mongoose = require("mongoose");
+const { ObjectId } = require("mongodb");
+
+require("dotenv").config();
+
+const app = express();
+
 app.use(cors());
+
+const username = process.argv[2];
+const password = process.argv[3];
+
+const url = `mongodb+srv://${username}:${password}@cluster0.cse4eeb.mongodb.net/?retryWrites=true&w=majority`;
+mongoose.set("strictQuery", false);
+mongoose.connect(url);
+
+const personSchema = new mongoose.Schema({
+  name: String,
+  number: String,
+  id: Number,
+});
+
+personSchema.set("toJSON", {
+  transform: (document, returnedObj) => {
+    returnedObj.ObjectId = returnedObj._id.toString();
+    delete returnedObj._id;
+    delete returnedObj.__v;
+  },
+});
+
+const Person = mongoose.model("Phonenumbers", personSchema);
 
 let persons = [
   {
@@ -30,11 +59,15 @@ let persons = [
 ];
 app.use(express.json());
 
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms - :body'))
+app.use(
+  morgan(
+    ":method :url :status :res[content-length] - :response-time ms - :body"
+  )
+);
 
-morgan.token('body', req => {
-  return JSON.stringify(req.body)
-})
+morgan.token("body", (req) => {
+  return JSON.stringify(req.body);
+});
 
 // morgan(function (tokens, req, res) {
 //   return [
@@ -45,7 +78,7 @@ morgan.token('body', req => {
 //     "-",
 //     tokens["response-time"](req, res),
 //     "ms",
-    
+
 //   ].join(" ");
 // });
 
@@ -58,8 +91,9 @@ app.get("/info", (req, res) => {
 });
 
 app.get("/api/persons", (req, res) => {
-  console.log(persons);
-  res.json(persons);
+  Person.find({}).then((persons) => {
+    res.json(persons);
+  });
 });
 
 app.get("/api/persons/:id", (req, res) => {
