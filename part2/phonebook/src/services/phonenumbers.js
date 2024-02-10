@@ -16,8 +16,10 @@ const update = (id, newObject) => {
   return request.then((response) => response.data);
 };
 
-const deleteEntry = (id) => {
-  axios.delete(`${baseUrl}/${id}`);
+const deleteEntry = (name) => {
+  const request = axios.delete(`${baseUrl}/${name}`);
+  console.log(request);
+  return request.then((response) => response.data);
 };
 const service = { getAll, create, update, deleteEntry };
 

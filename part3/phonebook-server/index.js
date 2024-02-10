@@ -66,9 +66,9 @@ app.get("/api/persons/:id", (req, res) => {
     .catch((error) => res.sendStatus(404));
 });
 
-app.delete("/api/persons/:id", (req, res) => {
-  const id = req.params.id;
-  Person.deleteOne({ _id: id }).then(() => res.sendStatus(204));
+app.delete("/api/persons/:name", (req, res) => {
+  const name = req.params.name;
+  Person.deleteOne({ name: name }).then(() => res.sendStatus(204));
 });
 
 app.post("/api/persons", (req, res) => {
