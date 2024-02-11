@@ -37,9 +37,17 @@ app.get("/api/notes/:id", (req, res) => {
   const id = req.params.id;
   Notes.findById(id)
     .then((notes) => {
-      res.json(notes);
+      if (notes) {
+        res.json(notes);
+      } else {
+        res.json({"error": "Note Not Found"})
+        res.sendStatus(404).end();
+      }
     })
-    .catch((error) => res.sendStatus(404));
+    .catch((error) => {
+      console.log(error);
+      res.status(404).send({"error": "Note ID Not Formatted"});
+    });
 });
 
 //Delete a Note by ID
