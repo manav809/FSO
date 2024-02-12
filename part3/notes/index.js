@@ -5,8 +5,6 @@ require("dotenv").config();
 const Notes = require("./models/note");
 const app = express();
 
-app.use(cors());
-
 const requestLogger = (req, res, next) => {
   console.log("Method: ", req.method);
   console.log("Path: ", req.path);
@@ -15,11 +13,18 @@ const requestLogger = (req, res, next) => {
   next();
 };
 
-app.use(requestLogger);
-//Header to know that the request will be dealing with JSON
-app.use(express.json());
+const errorHandler = (error, req, res, next) => {
+  res.status(404).send({ error: "malformatted id" });
+  next(error);
+};
 
+app.use(express.json());
+app.use(cors());
 app.use(express.static("build"));
+
+//request middleware
+app.use(requestLogger);
+
 //Root
 app.get("/", (req, res) => {
   res.send("<h1>Hello World</h1>");
@@ -33,27 +38,28 @@ app.get("/api/notes", (req, res) => {
 });
 
 //Get all Notes by Id
-app.get("/api/notes/:id", (req, res) => {
+app.get("/api/notes/:id", (req, res, next) => {
   const id = req.params.id;
   Notes.findById(id)
     .then((notes) => {
       if (notes) {
         res.json(notes);
       } else {
-        res.json({"error": "Note Not Found"})
+        res.json({ error: "Note Not Found" });
         res.sendStatus(404).end();
       }
     })
     .catch((error) => {
-      console.log(error);
-      res.status(404).send({"error": "Note ID Not Formatted"});
+      next(error);
     });
 });
 
 //Delete a Note by ID
-app.delete("/api/notes/:id", (req, res) => {
+app.delete("/api/notes/:id", (req, res, error) => {
   const id = req.params.id;
-  Notes.deleteOne({ _id: id }).then(() => res.sendStatus(204));
+  Notes.deleteOne({ _id: id })
+    .then(() => res.sendStatus(204).end())
+    .catch((error) => next(error));
 });
 
 //Add a Note
@@ -72,14 +78,17 @@ app.post("/api/notes", (req, res) => {
   });
 });
 
-app.put("/api/notes/:id", (req, res) => {
+app.put("/api/notes/:id", (req, res, next) => {
   const body = req.body;
   const id = req.params.id;
-  Notes.findByIdAndUpdate({ _id: id }, body).then((body) => res.json(body));
+  Notes.findByIdAndUpdate({ _id: id }, body)
+    .then((body) => res.json(body))
+    .catch((error) => next(error));
 });
 const PORT = 3001;
 
 app.listen(PORT);
+app.use(errorHandler);
 
 console.log(`Server is running on port ${PORT}`);
 
