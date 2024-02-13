@@ -3,7 +3,7 @@ const listEndpoints = require("express-list-endpoints");
 const cors = require("cors");
 const morgan = require("morgan");
 require("dotenv").config();
-const Person = require("./models/phone")
+const Person = require("./models/phone");
 
 const app = express();
 
@@ -37,12 +37,12 @@ app.get("/api/persons/:id", (req, res) => {
   const id = req.params.id;
   Person.findById(id)
     .then((person) => res.json(person))
-    .catch((error) => res.sendStatus(404));
+    .catch((error) => res.sendStatus(404).end());
 });
 
 app.delete("/api/persons/:name", (req, res) => {
   const name = req.params.name;
-  Person.deleteOne({ name: name }).then(() => res.sendStatus(204));
+  Person.deleteOne({ name: name }).then(() => res.sendStatus(204).end());
 });
 
 app.post("/api/persons", (req, res) => {
