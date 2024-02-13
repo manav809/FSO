@@ -28,8 +28,8 @@ app.get("/", (req, res) => {
   res.send("<h1>Hello World</h1>");
 });
 
-app.get("/info", (req, res) => {
-  res.send(`Phonebook has info for ${persons.length} people <br /> ${Date()}`);
+app.get("/info", async (req, res) => {
+  res.send(`Phonebook has info for ${await Person.countDocuments({}).exec()} people <br /> ${Date()}`);
 });
 
 app.get("/api/persons", (req, res) => {
