@@ -73,9 +73,12 @@ app.post("/api/notes", (req, res) => {
     content: body.content,
     important: Boolean(body.important) || false,
   });
-  note.save().then((saved) => {
-    res.json(saved);
-  });
+  note
+    .save()
+    .then((saved) => {
+      res.json(saved);
+    })
+    .catch((error) => next(error));
 });
 
 app.put("/api/notes/:id", (req, res, next) => {

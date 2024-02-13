@@ -19,6 +19,11 @@ morgan.token("body", (req) => {
   return JSON.stringify(req.body);
 });
 
+const errorHandler = (error, req, res, next) => {
+  res.status(404).send({ error: "malformatted id" });
+  next(error);
+};
+
 app.get("/", (req, res) => {
   res.send("<h1>Hello World</h1>");
 });
@@ -33,30 +38,45 @@ app.get("/api/persons", (req, res) => {
   });
 });
 
-app.get("/api/persons/:id", (req, res) => {
+app.get("/api/persons/:id", (req, res, next) => {
   const id = req.params.id;
   Person.findById(id)
-    .then((person) => res.json(person))
-    .catch((error) => res.sendStatus(404).end());
+    .then((person) => {
+      if (person) {
+        res.json(person);
+      } else {
+        res.json({ error: "Person Not Found" }).sendStatus(404).end();
+      }
+    })
+    .catch((error) => next(error));
 });
 
 app.delete("/api/persons/:name", (req, res) => {
   const name = req.params.name;
-  Person.deleteOne({ name: name }).then(() => res.sendStatus(204).end());
+  Person.deleteOne({ name: name })
+    .then(() => res.sendStatus(204).end())
+    .catch((error) => next(error));
 });
 
 app.post("/api/persons", (req, res) => {
   const body = req.body;
+
   if (!body.name || !body.number) {
     res.sendStatus(400).json({ error: "Missing Content" });
     return;
   }
+
   const person = new Person({
     name: body.name,
     number: body.number,
   });
-  person.save().then((saved) => res.json(saved));
+  person
+    .save()
+    .then((saved) => res.json(saved))
+    .catch((error) => next(error));
 });
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3001;
 
