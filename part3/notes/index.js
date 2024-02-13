@@ -14,7 +14,12 @@ const requestLogger = (req, res, next) => {
 };
 
 const errorHandler = (error, req, res, next) => {
-  res.status(404).send({ error: "malformatted id" });
+  console.error(error.message);
+  if (error.name === "CastError") {
+    return res.status(404).send({ error: "malformatted id" });
+  } else if (error.name === "ValidationError") {
+    return res.status(400).json({ error: error.message });
+  }
   next(error);
 };
 
@@ -69,6 +74,7 @@ app.post("/api/notes", (req, res, next) => {
   if (!body.content) {
     return res.status(400).json({ error: "Missing Content" });
   }
+
   const note = new Notes({
     content: body.content,
     important: Boolean(body.important) || false,
@@ -82,10 +88,15 @@ app.post("/api/notes", (req, res, next) => {
 });
 
 app.put("/api/notes/:id", (req, res, next) => {
-  const body = req.body;
   const id = req.params.id;
-  Notes.findByIdAndUpdate({ _id: id }, body)
-    .then((body) => res.json(body))
+  const { content, important } = req.body;
+
+  Notes.findByIdAndUpdate(
+    { _id: id },
+    { content, important },
+    { new: true, runValidators: true, context: "query" }
+  )
+    .then((update) => res.json(update))
     .catch((error) => next(error));
 });
 const PORT = 3001;
