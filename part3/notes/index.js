@@ -55,7 +55,7 @@ app.get("/api/notes/:id", (req, res, next) => {
 });
 
 //Delete a Note by ID
-app.delete("/api/notes/:id", (req, res, error) => {
+app.delete("/api/notes/:id", (req, res, next) => {
   const id = req.params.id;
   Notes.deleteOne({ _id: id })
     .then(() => res.sendStatus(204).end())
@@ -63,7 +63,7 @@ app.delete("/api/notes/:id", (req, res, error) => {
 });
 
 //Add a Note
-app.post("/api/notes", (req, res) => {
+app.post("/api/notes", (req, res, next) => {
   const body = req.body;
 
   if (!body.content) {

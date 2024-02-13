@@ -58,7 +58,7 @@ app.delete("/api/persons/:name", (req, res) => {
     .catch((error) => next(error));
 });
 
-app.post("/api/persons", (req, res) => {
+app.post("/api/persons", (req, res, next) => {
   const body = req.body;
 
   if (!body.name || !body.number) {
@@ -73,6 +73,14 @@ app.post("/api/persons", (req, res) => {
   person
     .save()
     .then((saved) => res.json(saved))
+    .catch((error) => next(error));
+});
+
+app.put("/api/persons/:name", (req, res, next) => {
+  const body = req.body;
+  const name = req.params.name;
+  Person.updateOne({ name: name }, body)
+    .then((body) => res.json(body))
     .catch((error) => next(error));
 });
 

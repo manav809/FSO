@@ -21,6 +21,19 @@ const PersonForm = ({
       name: newName,
       number: phoneNumber,
     };
+
+    if (persons.length === 0) {
+      console.log("helo");
+      phonenumberService.create(newPerson).then(() => {
+        setPersons(persons.concat(newPerson));
+        setAddedAlert(`Added ${newPerson.name}`);
+        setAlertColor("added");
+        setTimeout(() => {
+          setAddedAlert(null);
+        }, 5000);
+      });
+      return;
+    }
     for (let i = 0; i < persons.length; i++) {
       if (persons[i].name === newName) {
         if (
@@ -30,11 +43,13 @@ const PersonForm = ({
         ) {
           const person = persons.find((person) => person.name === newName);
           phonenumberService
-            .update(person.id, newPerson)
-            .then((newPerson) => {
-              setPersons(
-                persons.map((p) => (p.id !== person.id ? p : newPerson))
+            .update(newPerson)
+            .then(() => {
+              const people = persons.map((p) =>
+                p.name !== person.name ? p : newPerson
               );
+              console.log(people);
+              setPersons(people);
               setAddedAlert(`Updated ${person.name}`);
               setAlertColor("added");
               setTimeout(() => {
@@ -53,7 +68,10 @@ const PersonForm = ({
           return;
         }
       }
-      if (i === persons.length - 1 && persons[i].name !== newName) {
+      if (
+        (i === persons.length - 1 && persons[i].name !== newName) ||
+        persons.length === 0
+      ) {
         console.log("helo");
         phonenumberService.create(newPerson).then(() => {
           setPersons(persons.concat(newPerson));
