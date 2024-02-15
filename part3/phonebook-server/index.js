@@ -20,7 +20,12 @@ morgan.token("body", (req) => {
 });
 
 const errorHandler = (error, req, res, next) => {
-  res.status(404).send({ error: "malformatted id" });
+  console.error(error);
+  if (error.name === "CastError") {
+    return res.status(404).send({ error: "malformatted id" });
+  } else if (error.name === "ValidationError") {
+    return res.status(404).send({ error: error.message });
+  }
   next(error);
 };
 
@@ -29,7 +34,11 @@ app.get("/", (req, res) => {
 });
 
 app.get("/info", async (req, res) => {
-  res.send(`Phonebook has info for ${await Person.countDocuments({}).exec()} people <br /> ${Date()}`);
+  res.send(
+    `Phonebook has info for ${await Person.countDocuments(
+      {}
+    ).exec()} people <br /> ${Date()}`
+  );
 });
 
 app.get("/api/persons", (req, res) => {

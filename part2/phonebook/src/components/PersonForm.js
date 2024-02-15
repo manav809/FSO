@@ -23,7 +23,6 @@ const PersonForm = ({
     };
 
     if (persons.length === 0) {
-      console.log("helo");
       phonenumberService.create(newPerson).then(() => {
         setPersons(persons.concat(newPerson));
         setAddedAlert(`Added ${newPerson.name}`);
@@ -72,15 +71,20 @@ const PersonForm = ({
         (i === persons.length - 1 && persons[i].name !== newName) ||
         persons.length === 0
       ) {
-        console.log("helo");
-        phonenumberService.create(newPerson).then(() => {
-          setPersons(persons.concat(newPerson));
-          setAddedAlert(`Added ${newPerson.name}`);
-          setAlertColor("added");
-          setTimeout(() => {
-            setAddedAlert(null);
-          }, 5000);
-        });
+        phonenumberService
+          .create(newPerson)
+          .then(() => {
+            setPersons(persons.concat(newPerson));
+            setAddedAlert(`Added ${newPerson.name}`);
+            setAlertColor("added");
+            setTimeout(() => {
+              setAddedAlert(null);
+            }, 5000);
+          })
+          .catch((error) => {
+            setAddedAlert(`${error.response.data.error}`);
+            setAlertColor("deleted");
+          });
       }
     }
   };
