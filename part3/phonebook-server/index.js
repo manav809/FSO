@@ -88,7 +88,11 @@ app.post("/api/persons", (req, res, next) => {
 app.put("/api/persons/:name", (req, res, next) => {
   const body = req.body;
   const name = req.params.name;
-  Person.updateOne({ name: name }, body)
+  Person.updateOne({ name: name }, body, {
+    new: true,
+    runValidators: true,
+    context: "query",
+  })
     .then((body) => res.json(body))
     .catch((error) => next(error));
 });

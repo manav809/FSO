@@ -55,8 +55,8 @@ const PersonForm = ({
                 setAddedAlert(null);
               }, 5000);
             })
-            .catch(() => {
-              setAddedAlert(`${newName} was deleted`);
+            .catch((error) => {
+              setAddedAlert(`${error.response.data.error}`);
               setAlertColor("deleted");
               setTimeout(() => {
                 setAddedAlert(null);
