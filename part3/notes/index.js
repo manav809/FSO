@@ -2,19 +2,21 @@ const express = require('express')
 const listEndpoints = require('express-list-endpoints')
 const cors = require('cors')
 require('dotenv').config()
+const config = require('./utils/config')
+const logger = require('./utils/logger')
 const Notes = require('./models/note')
 const app = express()
 
 const requestLogger = (req, res, next) => {
-  console.log('Method: ', req.method)
-  console.log('Path: ', req.path)
-  console.log('Body: ', req.body)
-  console.log('---')
+  logger.info('Method: ', req.method)
+  logger.info('Path: ', req.path)
+  logger.info('Body: ', req.body)
+  logger.info('---')
   next()
 }
 
 const errorHandler = (error, req, res, next) => {
-  console.error(error.message)
+  logger.error(error.message)
   if (error.name === 'CastError') {
     return res.status(404).send({ error: 'malformatted id' })
   } else if (error.name === 'ValidationError') {
@@ -104,6 +106,6 @@ const PORT = 3001
 app.listen(PORT)
 app.use(errorHandler)
 
-console.log(`Server is running on port ${PORT}`)
+logger.info(`Server is running on port ${PORT}`)
 
 console.table(listEndpoints(app))
