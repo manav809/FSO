@@ -15,6 +15,8 @@ const Blog = mongoose.model("Blog", blogSchema);
 
 const mongoUrl = process.env.MONGO_URL;
 
+mongoose.set('strictQuery', false)
+
 mongoose.connect(mongoUrl);
 
 app.use(cors());
