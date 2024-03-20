@@ -1,7 +1,9 @@
-POST http://localhost:3001/api/notes/
+POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-    "content": "VS Code rest client is cool",
-    "important": true
+  "title": "Hello World",
+  "author": "Manav Patel",
+  "url": "facebook.com",
+  "likes": 10
 }
