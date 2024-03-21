@@ -14,11 +14,7 @@ const erroHandler = (error, req, res, next) => {
     return res.status(404).send({ error: "malformatted id" });
   } else if (error.name === "ValidationError") {
     return res.status(400).json({ error: error.message });
-  } else {
-    return res
-      .status(400)
-      .json({ error: error.message, devMessage: "Set Breakpoint" });
-  }
+  } 
   next(error);
 };
 
