@@ -12,10 +12,8 @@ const totalLikes = (blogs) => {
 const highestLikes = (blogs) => {
   // First, get the max vote from the array of objects
   var maxVotes = Math.max(...blogs.map((e) => e.likes));
-
   // Get the object having votes as max votes
   var blog = blogs.find((blog) => blog.likes === maxVotes);
-
   delete blog._id;
   delete blog.url;
   delete blog.__v;
@@ -23,8 +21,19 @@ const highestLikes = (blogs) => {
   return blog;
 };
 
+const mostBlogs = (blogs) => {
+  var maxBlogs = Math.max(...blogs.map((e) => e.blogs))
+  var author = blogs.find((blog) => blog.blogs === maxBlogs)
+
+  return {
+    author: author.author,
+    blogs: author.blogs
+  }
+}
+
 module.exports = {
   dummy,
   totalLikes,
   highestLikes,
+  mostBlogs
 };
