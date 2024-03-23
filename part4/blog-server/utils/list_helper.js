@@ -10,6 +10,7 @@ const totalLikes = (blogs) => {
 };
 
 const highestLikes = (blogs) => {
+  //4.5 and 4.7 are the same
   // First, get the max vote from the array of objects
   var maxVotes = Math.max(...blogs.map((e) => e.likes));
   // Get the object having votes as max votes
