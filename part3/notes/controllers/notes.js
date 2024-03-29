@@ -11,6 +11,10 @@ notesRouter.get("/", (req, res) => {
   Notes.find({}).then((notes) => {
     res.json(notes);
   });
+  /**
+   * const notes = await Notes.find({})
+   * response.json(notes)
+   */
 });
 
 //Get all Notes by Id
@@ -53,7 +57,7 @@ notesRouter.post("/", (req, res, next) => {
   note
     .save()
     .then((saved) => {
-      res.json(saved);
+      res.status(201).json(saved);
     })
     .catch((error) => next(error));
 });

@@ -25,7 +25,7 @@ beforeEach(async () => {
   noteObj = new Note(initialNotes[1]);
   await noteObj.save();
 });
-
+// Basic Functionality
 test("notes are returned as json", async () => {
   await api
     .get("/api/notes")
@@ -38,10 +38,31 @@ test("there is 1 note", async () => {
   assert.strictEqual(res.body.length, initialNotes.length);
 });
 
-test("the note first note tells us that HTML is easy", async () => {
+test("the first note is about HTTP methods", async () => {
   const res = await api.get("/api/notes");
-  const contents = res.body.map(obj => obj.content);
+  const contents = res.body.map((obj) => obj.content);
   assert.strictEqual(contents[0], "HTML is easy");
+});
+
+test("a vallid note can be added", async () => {
+  const newNote = {
+    content: "async/await simplifies making async calls",
+    important: true,
+  };
+
+  await api
+    .post("/api/notes")
+    .send(newNote)
+    .expect(201)
+    .expect("Content-Type", /application\/json/);
+
+  const response = await api.get("/api/notes");
+
+  const contents = response.body.map((r) => r.content);
+
+  assert.strictEqual(response.body.length, initialNotes.length + 1)
+
+  assert(contents.includes('async/await simplifies making async calls'))
 });
 
 after(async () => {
