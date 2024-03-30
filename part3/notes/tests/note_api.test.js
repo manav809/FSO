@@ -44,7 +44,7 @@ test("the first note is about HTTP methods", async () => {
   assert.strictEqual(contents[0], "HTML is easy");
 });
 
-test("a vallid note can be added", async () => {
+test("a valid note can be added", async () => {
   const newNote = {
     content: "async/await simplifies making async calls",
     important: true,
@@ -60,9 +60,21 @@ test("a vallid note can be added", async () => {
 
   const contents = response.body.map((r) => r.content);
 
-  assert.strictEqual(response.body.length, initialNotes.length + 1)
+  assert.strictEqual(response.body.length, initialNotes.length + 1);
 
-  assert(contents.includes('async/await simplifies making async calls'))
+  assert(contents.includes("async/await simplifies making async calls"));
+});
+
+test("note without content is not added", async () => {
+  const newNote = {
+    important: true,
+  };
+
+  await api.post("/api/notes").send(newNote).expect(400);
+
+  const response = await api.get("/api/notes");
+
+  assert.strictEqual(response.body.length, initialNotes.length);
 });
 
 after(async () => {
