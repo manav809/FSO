@@ -33,6 +33,20 @@ notesRouter.get("/:id", (req, res, next) => {
       next(error);
     });
 });
+/*
+notesRouter.get('/:id', async (request, response, next) => {
+  try {
+    const note = await Note.findById(request.params.id)
+    if (note) {
+      response.json(note)
+    } else {
+      response.status(404).end()
+    }
+  } catch(exception) {
+    next(exception)
+  }
+})
+*/
 
 //Delete a Note by ID
 notesRouter.delete("/:id", (req, res, next) => {
@@ -42,6 +56,16 @@ notesRouter.delete("/:id", (req, res, next) => {
     .catch((error) => next(error));
 });
 
+/*
+notesRouter.delete('/:id', async (request, response, next) => {
+  try {
+    await Note.findByIdAndDelete(request.params.id)
+    response.status(204).end()
+  } catch(exception) {
+    next(exception)
+  }
+})
+*/
 //Add a Note
 notesRouter.post("/", (req, res, next) => {
   const body = req.body;
@@ -54,12 +78,24 @@ notesRouter.post("/", (req, res, next) => {
     content: body.content,
     important: Boolean(body.important) || false,
   });
+
   note
     .save()
     .then((saved) => {
       res.status(201).json(saved);
     })
     .catch((error) => next(error));
+
+  /**
+   * Alternatively, we could have an async before (req, res, next)
+   * then we could just do
+   * try{
+   *  const savedNote = await note.save()
+   *  res.status(201).json(savedNote)
+   * } catch (err) {
+   *  next(err)
+   * }
+   */
 });
 
 notesRouter.put("/:id", (req, res, next) => {

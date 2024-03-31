@@ -4,27 +4,18 @@ const Note = require("../models/note");
 const mongoose = require("mongoose");
 const supertest = require("supertest");
 const app = require("../app");
+const helper = require("./test_helper");
 
 const api = supertest(app);
 
-const initialNotes = [
-  {
-    content: "HTML is easy",
-    important: false,
-  },
-  {
-    content: "Browser executes JavaScript",
-    important: true,
-  },
-];
-
 beforeEach(async () => {
   await Note.deleteMany({});
-  let noteObj = new Note(initialNotes[0]);
+  let noteObj = new Note(helper.initialNotes[0]);
   await noteObj.save();
-  noteObj = new Note(initialNotes[1]);
+  noteObj = new Note(helper.initialNotes[1]);
   await noteObj.save();
 });
+
 // Basic Functionality
 test("notes are returned as json", async () => {
   await api
@@ -33,9 +24,9 @@ test("notes are returned as json", async () => {
     .expect("Content-Type", /application\/json/);
 });
 
-test("there is 1 note", async () => {
+test("all notes are returned", async () => {
   const res = await api.get("/api/notes");
-  assert.strictEqual(res.body.length, initialNotes.length);
+  assert.strictEqual(res.body.length, helper.initialNotes.length);
 });
 
 test("the first note is about HTTP methods", async () => {
@@ -56,11 +47,11 @@ test("a valid note can be added", async () => {
     .expect(201)
     .expect("Content-Type", /application\/json/);
 
-  const response = await api.get("/api/notes");
+  const notes = await helper.notesInDb();
 
-  const contents = response.body.map((r) => r.content);
+  assert.strictEqual(notes.length, helper.initialNotes.length + 1);
 
-  assert.strictEqual(response.body.length, initialNotes.length + 1);
+  const contents = notes.map((r) => r.content);
 
   assert(contents.includes("async/await simplifies making async calls"));
 });
@@ -72,9 +63,35 @@ test("note without content is not added", async () => {
 
   await api.post("/api/notes").send(newNote).expect(400);
 
-  const response = await api.get("/api/notes");
+  const response = helper.notesInDb();
+  assert.strictEqual((await response).length, helper.initialNotes.length);
+});
 
-  assert.strictEqual(response.body.length, initialNotes.length);
+test("a specific note can be viewed", async () => {
+  const notes = await helper.notesInDb();
+
+  const noteToView = notes[0];
+
+  const getSpecificNote = await api
+    .get(`/api/notes/${noteToView.id}`)
+    .expect(200)
+    .expect("Content-Type", /application\/json/);
+
+  assert.deepStrictEqual(getSpecificNote.body, noteToView);
+});
+
+test("a note can be deleted", async () => {
+  const notesStart = await helper.notesInDb();
+  const notesToDelete = notesStart[0];
+
+  await api.delete(`/api/notes/${notesToDelete.id}`).expect(204);
+
+  const notesEnd = await helper.notesInDb();
+
+  const contents = notesEnd.map((note) => note.content);
+  assert(!contents.includes(notesToDelete.content));
+
+  assert.strictEqual(notesEnd.length, helper.initialNotes.length - 1);
 });
 
 after(async () => {
