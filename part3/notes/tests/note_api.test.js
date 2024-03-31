@@ -10,10 +10,12 @@ const api = supertest(app);
 
 beforeEach(async () => {
   await Note.deleteMany({});
-  let noteObj = new Note(helper.initialNotes[0]);
-  await noteObj.save();
-  noteObj = new Note(helper.initialNotes[1]);
-  await noteObj.save();
+
+  const noteObjs = helper.initialNotes.map((note) => new Note(note));
+
+  const promiseNotes = noteObjs.map((note) => note.save());
+
+  await Promise.all(promiseNotes);
 });
 
 // Basic Functionality
