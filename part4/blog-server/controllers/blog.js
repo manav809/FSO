@@ -18,9 +18,12 @@ blogRouter.post("/", async (req, res) => {
     url: body.url,
     likes: body.likes,
   });
-  blog.save().then((result) => {
-    res.status(201).json(result);
-  });
+  blog
+    .save()
+    .then((result) => {
+      res.status(201).json(result);
+    })
+    .catch(() => res.status(400).send("Not Found"));
 });
 
 module.exports = blogRouter;

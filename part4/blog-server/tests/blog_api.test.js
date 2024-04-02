@@ -77,6 +77,14 @@ test("new blogs with no likes default to 0", async () => {
   assert("likes" in response[2]);
 });
 
+test("new blogs with no title or url are rejected", async () => {
+  const newBlog = {
+    author: "Manav",
+    likes: 3,
+  };
+
+  await api.post("/api/blogs").send(newBlog).expect(400);
+});
 after(async () => {
   await mongoose.connection.close();
 });
