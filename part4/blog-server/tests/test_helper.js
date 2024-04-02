@@ -9,7 +9,7 @@ const initialBlogs = [
   },
   {
     title: "Frankenstein",
-    autor: "Mary Shelley",
+    author: "Mary Shelley",
     url: "facebook.com",
     likes: 1,
   },

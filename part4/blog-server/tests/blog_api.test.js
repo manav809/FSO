@@ -33,7 +33,30 @@ test("blogs have id attribute", async () => {
     .expect("Content-Type", /application\/json/);
 
   const response = await helper.blogsInDb();
-  assert('id' in response[0])
+  assert("id" in response[0]);
+});
+
+test("blogs can be added to db", async () => {
+  const newBlog = {
+    title: "Kite Runner",
+    author: "Khaled Hosseini",
+    url: "amazon.com",
+    likes: 1,
+  };
+
+  await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(201)
+    .expect("Content-Type", /application\/json/);
+
+  const response = await helper.blogsInDb();
+
+  assert.strictEqual(response.length, helper.initialBlogs.length + 1);
+
+  const titles = response.map((blog) => blog.title);
+
+  assert(titles.includes("Kite Runner"));
 });
 
 after(async () => {
