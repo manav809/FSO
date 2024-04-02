@@ -59,6 +59,24 @@ test("blogs can be added to db", async () => {
   assert(titles.includes("Kite Runner"));
 });
 
+test("new blogs with no likes default to 0", async () => {
+  const newBlog = {
+    title: "We are not free",
+    author: "Traci Chee",
+    url: "microsoft.com",
+  };
+
+  await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(201)
+    .expect("Content-Type", /application\/json/);
+
+  const response = await helper.blogsInDb();
+
+  assert("likes" in response[2]);
+});
+
 after(async () => {
   await mongoose.connection.close();
 });

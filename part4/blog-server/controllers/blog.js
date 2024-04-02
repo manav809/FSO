@@ -9,6 +9,9 @@ blogRouter.get("/", (req, res) => {
 
 blogRouter.post("/", async (req, res) => {
   const body = req.body;
+  if (!("likes" in body)) {
+    body.likes = 0;
+  }
   const blog = new Blog({
     title: body.title,
     author: body.author,
@@ -20,4 +23,4 @@ blogRouter.post("/", async (req, res) => {
   });
 });
 
-module.exports = blogRouter
+module.exports = blogRouter;
