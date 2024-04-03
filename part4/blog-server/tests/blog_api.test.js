@@ -85,6 +85,15 @@ test("new blogs with no title or url are rejected", async () => {
 
   await api.post("/api/blogs").send(newBlog).expect(400);
 });
+
+test("blogs can be deleted", async () => {
+  const response = await helper.blogsInDb();
+  const blog = response[0];
+  await api.delete(`/api/blogs/${blog.id}`).expect(204);
+  const afterDeletion = await helper.blogsInDb();
+  assert.strictEqual(afterDeletion.length, helper.initialBlogs.length - 1);
+});
+
 after(async () => {
   await mongoose.connection.close();
 });
