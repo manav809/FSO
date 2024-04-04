@@ -94,6 +94,21 @@ test("blogs can be deleted", async () => {
   assert.strictEqual(afterDeletion.length, helper.initialBlogs.length - 1);
 });
 
+test("blogs can be updated", async () => {
+  const response = await helper.blogsInDb();
+  const id = response[0].id;
+  const updated = {
+    title: "The Alchemist",
+    author: "Paulo Coelho",
+    url: "google.com",
+    likes: 2,
+  };
+  await api.put(`/api/blogs/${id}`).send(updated).expect(201);
+  const newResponse = await helper.blogsInDb();
+  const updatedBlog = newResponse[0];
+  assert.strictEqual(updated.likes, newResponse[0].likes);
+});
+
 after(async () => {
   await mongoose.connection.close();
 });

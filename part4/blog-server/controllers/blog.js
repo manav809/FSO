@@ -26,10 +26,22 @@ blogRouter.post("/", async (req, res) => {
     .catch(() => res.status(400).send("Not Found"));
 });
 
-blogRouter.delete("/:id", async (req, res, next) => {
+blogRouter.delete("/:id", (req, res, next) => {
   const id = req.params.id;
   Blog.deleteOne({ _id: id })
     .then(() => res.sendStatus(204).end())
+    .catch((error) => next(error));
+});
+
+blogRouter.put("/:id", (req, res, next) => {
+  const id = req.params.id;
+  const { likes } = req.body;
+  Blog.findByIdAndUpdate(
+    { _id: id },
+    { likes },
+    { new: true, runValidators: true, context: "query" }
+  )
+    .then((update) => res.status(201).json(update))
     .catch((error) => next(error));
 });
 
