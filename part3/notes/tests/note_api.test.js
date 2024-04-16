@@ -1,4 +1,3 @@
-const { test, after, beforeEach } = require("node:test");
 const assert = require("node:assert");
 const Note = require("../models/note");
 const mongoose = require("mongoose");
