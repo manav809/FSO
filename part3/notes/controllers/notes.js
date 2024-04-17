@@ -10,9 +10,11 @@ notesRouter.get("/info", (req, res) => {
 
 //Get all Notes
 notesRouter.get("/", (req, res) => {
-  Notes.find({}).then((notes) => {
-    res.json(notes);
-  });
+  Notes.find({})
+    .populate("user", {name: 1, notes: 1})
+    .then((notes) => {
+      res.json(notes);
+    });
   /**
    * const notes = await Notes.find({})
    * response.json(notes)
@@ -90,7 +92,6 @@ notesRouter.post("/", async (req, res, next) => {
       user.notes = user.notes.concat(saved._id);
       user.save();
       res.status(201).json(saved);
-
     })
     .catch((error) => next(error));
 
