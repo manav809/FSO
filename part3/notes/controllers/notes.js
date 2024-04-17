@@ -1,5 +1,7 @@
 const notesRouter = require("express").Router();
 const Notes = require("../models/note");
+const User = require("../models/user");
+const Users = require("../models/user");
 
 //Root
 notesRouter.get("/info", (req, res) => {
@@ -67,8 +69,10 @@ notesRouter.delete('/:id', async (request, response, next) => {
 })
 */
 //Add a Note
-notesRouter.post("/", (req, res, next) => {
+notesRouter.post("/", async (req, res, next) => {
   const body = req.body;
+
+  const user = await User.findById(body.user);
 
   if (!body.content) {
     return res.status(400).json({ error: "Missing Content" });
@@ -77,12 +81,16 @@ notesRouter.post("/", (req, res, next) => {
   const note = new Notes({
     content: body.content,
     important: Boolean(body.important) || false,
+    user: user.id,
   });
 
   note
     .save()
     .then((saved) => {
+      user.notes = user.notes.concat(saved._id);
+      user.save();
       res.status(201).json(saved);
+
     })
     .catch((error) => next(error));
 
