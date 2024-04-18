@@ -2,6 +2,17 @@ const notesRouter = require("express").Router();
 const Notes = require("../models/note");
 const User = require("../models/user");
 const Users = require("../models/user");
+const jwt = require("jsonwebtoken");
+
+const getTokenFrom = (request) => {
+  const authorization = request.get("authorization");
+
+  if (authorization && authorization.startsWith("Bearer ", "")) {
+    return authorization.replace("Bearer ", "");
+  }
+
+  return null;
+};
 
 //Root
 notesRouter.get("/info", (req, res) => {
@@ -11,7 +22,7 @@ notesRouter.get("/info", (req, res) => {
 //Get all Notes
 notesRouter.get("/", (req, res) => {
   Notes.find({})
-    .populate("user", {name: 1, notes: 1})
+    .populate("user", { name: 1, notes: 1 })
     .then((notes) => {
       res.json(notes);
     });
@@ -74,7 +85,11 @@ notesRouter.delete('/:id', async (request, response, next) => {
 notesRouter.post("/", async (req, res, next) => {
   const body = req.body;
 
-  const user = await User.findById(body.user);
+  const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET);
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: "token invalid" });
+  }
+  const user = await User.findById(decodedToken.id);
 
   if (!body.content) {
     return res.status(400).json({ error: "Missing Content" });
