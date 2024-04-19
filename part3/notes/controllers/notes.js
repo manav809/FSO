@@ -5,10 +5,10 @@ const Users = require("../models/user");
 const jwt = require("jsonwebtoken");
 
 const getTokenFrom = (request) => {
-  const authorization = request.get("authorization");
+  const authorization = request.get("authorization");// get the authorization token
 
   if (authorization && authorization.startsWith("Bearer ", "")) {
-    return authorization.replace("Bearer ", "");
+    return authorization.replace("Bearer ", ""); //get the Bearer Token
   }
 
   return null;
@@ -85,11 +85,11 @@ notesRouter.delete('/:id', async (request, response, next) => {
 notesRouter.post("/", async (req, res, next) => {
   const body = req.body;
 
-  const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET);
+  const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET); //get the object from the decoded token
   if (!decodedToken.id) {
     return response.status(401).json({ error: "token invalid" });
   }
-  const user = await User.findById(decodedToken.id);
+  const user = await User.findById(decodedToken.id); // find by the id of the user we from the decoded token
 
   if (!body.content) {
     return res.status(400).json({ error: "Missing Content" });
