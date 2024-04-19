@@ -4,6 +4,7 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const blogRouter = require("./controllers/blog");
+const userRouter = require("./controllers/user");
 require("dotenv").config();
 
 const app = express();
@@ -15,13 +16,14 @@ mongoose
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.log("Error Connecting: ", err.message));
 
-app.use(cors())
-app.use(express.static("dist"))
-app.use(express.json())
-app.use(middleware.requestLogger)
+app.use(cors());
+app.use(express.static("dist"));
+app.use(express.json());
+app.use(middleware.requestLogger);
 
-app.use("/api/blogs", blogRouter)
+app.use("/api/blogs", blogRouter);
+app.use("/api/users", userRouter);
 
-app.use(middleware.erroHandler)
+app.use(middleware.erroHandler);
 
-module.exports = app
+module.exports = app;
