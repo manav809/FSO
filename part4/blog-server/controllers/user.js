@@ -5,6 +5,13 @@ const User = require("../models/user");
 userRouter.post("/", async (req, res) => {
   const { username, name, password } = req.body;
 
+  if (password.length < 3 || username.length < 3) {
+    res
+      .status(401)
+      .json({
+        error: "Invalid Authentication: Username or Password Must be at least 3 Characters",
+      });
+  }
   const saltRounds = 10;
   const passwordHash = await bcrypt.hash(password, saltRounds);
 

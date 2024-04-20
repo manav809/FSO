@@ -1,6 +1,7 @@
 const config = require("./utils/config");
 const middleware = require("./utils/middleware");
 const express = require("express");
+require("express-async-errors"); // we dont need try and catch now
 const cors = require("cors");
 const mongoose = require("mongoose");
 const blogRouter = require("./controllers/blog");
@@ -24,6 +25,6 @@ app.use(middleware.requestLogger);
 app.use("/api/blogs", blogRouter);
 app.use("/api/users", userRouter);
 
-app.use(middleware.erroHandler);
+app.use(middleware.errorHandler);
 
 module.exports = app;
