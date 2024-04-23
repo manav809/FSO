@@ -1,7 +1,6 @@
 const notesRouter = require("express").Router();
 const Notes = require("../models/note");
 const User = require("../models/user");
-const Users = require("../models/user");
 const jwt = require("jsonwebtoken");
 
 const getTokenFrom = (request) => {
