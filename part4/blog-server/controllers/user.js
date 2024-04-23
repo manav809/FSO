@@ -6,11 +6,10 @@ userRouter.post("/", async (req, res) => {
   const { username, name, password } = req.body;
 
   if (password.length < 3 || username.length < 3) {
-    res
-      .status(401)
-      .json({
-        error: "Invalid Authentication: Username or Password Must be at least 3 Characters",
-      });
+    res.status(401).json({
+      error:
+        "Invalid Authentication: Username or Password Must be at least 3 Characters",
+    });
   }
   const saltRounds = 10;
   const passwordHash = await bcrypt.hash(password, saltRounds);
@@ -26,7 +25,8 @@ userRouter.post("/", async (req, res) => {
 });
 
 userRouter.get("/", async (req, res) => {
-  const users = await User.find({});
+  const users = await User.find({}).populate("blogs")
+  console.log(users)
   res.json(users);
 });
 
