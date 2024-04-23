@@ -86,7 +86,7 @@ notesRouter.post("/", async (req, res, next) => {
 
   const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET); //get the object from the decoded token
   if (!decodedToken.id) {
-    return response.status(401).json({ error: "token invalid" });
+    return res.status(401).json({ error: "token invalid" });
   }
   const user = await User.findById(decodedToken.id); // find by the id of the user we from the decoded token
 
