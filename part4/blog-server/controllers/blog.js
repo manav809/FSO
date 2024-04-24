@@ -19,7 +19,9 @@ blogRouter.post("/", async (req, res) => {
   if (!decodedToken.id) {
     return res.status(401).json({ error: "token invalid" });
   }
-
+  if (body.author !== decodedToken.id) {
+    return res.status(401).json({ error: "mismatch authors" });
+  }
   if (!("likes" in body)) {
     body.likes = 0;
   }
@@ -42,10 +44,21 @@ blogRouter.post("/", async (req, res) => {
     .catch(() => res.status(400).send("Not Found"));
 });
 
-blogRouter.delete("/:id", (req, res, next) => {
+blogRouter.delete("/:id", async (req, res, next) => {
   const id = req.params.id;
+
+  const decodedToken = jwt.verify(req.token, process.env.SECRET);
+
+  if (!decodedToken.id) {
+    return res.status(401).json({ error: "token invalid" });
+  }
+  const blog = await Blog.findById(id);
+
+  if (blog.author.toString() !== decodedToken.id) {
+    return res.status(401).json({ error: "mismatch authors" });
+  }
   Blog.deleteOne({ _id: id })
-    .then(() => res.sendStatus(204).end())
+    .then(() => res.sendStatus(204).json({ success: "Remove Blog" }).end())
     .catch((error) => next(error));
 });
 
