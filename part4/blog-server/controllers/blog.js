@@ -1,5 +1,4 @@
 const blogRouter = require("express").Router();
-const { request } = require("../app");
 const Blog = require("../models/blog");
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
@@ -14,12 +13,11 @@ blogRouter.get("/", (req, res) => {
 
 blogRouter.post("/", async (req, res) => {
   const body = req.body;
-  const decodedToken = jwt.verify(req.token, process.env.SECRET);
 
-  if (!decodedToken.id) {
+  if (!req.user.id) {
     return res.status(401).json({ error: "token invalid" });
   }
-  if (body.author !== decodedToken.id) {
+  if (body.author !== req.user.id) {
     return res.status(401).json({ error: "mismatch authors" });
   }
   if (!("likes" in body)) {
