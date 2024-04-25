@@ -82,32 +82,34 @@ const App = () => {
       }, 5000);
     }
   };
-
+  const loginForm = () => (
+    <form onSubmit={handleLogin}>
+      <div>
+        username{" "}
+        <input
+          type="text"
+          value={username}
+          name="Username"
+          onChange={(event) => setUsername(event.target.value)}
+        />
+      </div>
+      <div>
+        password{" "}
+        <input
+          type="text"
+          value={password}
+          name="Password"
+          onChange={(event) => setPassword(event.target.value)}
+        />
+      </div>
+      <button type="submit">login</button>
+    </form>
+  );
   return (
     <div>
       <h1>Notes</h1>
       {errorMessage ? <Notification message={errorMessage} /> : <></>}
-      <form onSubmit={handleLogin}>
-        <div>
-          username{" "}
-          <input
-            type="text"
-            value={username}
-            name="Username"
-            onChange={(event) => setUsername(event.target.value)}
-          />
-        </div>
-        <div>
-          password{" "}
-          <input
-            type="text"
-            value={password}
-            name="Password"
-            onChange={(event) => setPassword(event.target.value)}
-          />
-        </div>
-        <button type="submit">login</button>
-      </form>
+      {loginForm()}{" "}
       <div>
         <button onClick={() => setShowAll(!showAll)}>
           show {showAll ? "important" : "all"}
