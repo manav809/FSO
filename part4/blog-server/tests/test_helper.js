@@ -8,22 +8,12 @@ const initialBlogs = [
     url: "google.com",
     likes: 1,
   },
-  {
-    title: "Frankenstein",
-    author: "Mary Shelley",
-    url: "facebook.com",
-    likes: 1,
-  },
 ];
 
 const initialUsers = [
   {
     username: "manav809",
     name: "Manav Patel",
-  },
-  {
-    username: "minesh809",
-    name: "Minesh Patel",
   },
 ];
 
