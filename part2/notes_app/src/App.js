@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import notesService from "./services/notes";
 import Notification from "./components/Notification";
 import Footer from "./components/Footer";
+import loginService from "./services/login";
 
 const App = () => {
   const [notes, setNotes] = useState([]);
@@ -11,6 +12,7 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [user, setUser] = useState(null);
 
   const toggleImportanceOf = (id) => {
     console.log("importance of " + id + " needs to be toggled");
@@ -45,7 +47,6 @@ const App = () => {
     });
   }, []);
 
-  console.log("render", notes.length, "notes");
   const addNote = (event) => {
     event.preventDefault();
     console.log("button clicked", event.target);
@@ -62,9 +63,26 @@ const App = () => {
   const handleNoteChange = (event) => {
     setNewNote(event.target.value);
   };
-  const handleLogin = (event) => {
+
+  const handleLogin = async (event) => {
     event.preventDefault();
+    try {
+      console.log(username, password);
+      const user = await loginService.login({
+        username,
+        password,
+      });
+      setUser(user);
+      setUsername("");
+      setPassword("");
+    } catch (exception) {
+      setErrorMessage("Wrong Credentials");
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
+    }
   };
+
   return (
     <div>
       <h1>Notes</h1>
