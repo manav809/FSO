@@ -9,6 +9,8 @@ const App = () => {
   const [newNote, setNewNote] = useState("a new note...");
   const [showAll, setShowAll] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   const toggleImportanceOf = (id) => {
     console.log("importance of " + id + " needs to be toggled");
@@ -23,11 +25,11 @@ const App = () => {
       .catch((error) => {
         setErrorMessage(
           `Note '${note.content}' was already removed from the server`
-        )
+        );
         setTimeout(() => {
-          setErrorMessage(null)
-        }, 5000)
-        setNotes(notes.filter((note) => note.id !== id))
+          setErrorMessage(null);
+        }, 5000);
+        setNotes(notes.filter((note) => note.id !== id));
       });
   };
 
@@ -60,11 +62,34 @@ const App = () => {
   const handleNoteChange = (event) => {
     setNewNote(event.target.value);
   };
-
+  const handleLogin = (event) => {
+    event.preventDefault();
+  };
   return (
     <div>
       <h1>Notes</h1>
       {errorMessage ? <Notification message={errorMessage} /> : <></>}
+      <form onSubmit={handleLogin}>
+        <div>
+          username{" "}
+          <input
+            type="text"
+            value={username}
+            name="Username"
+            onChange={(event) => setUsername(event.target.value)}
+          />
+        </div>
+        <div>
+          password{" "}
+          <input
+            type="text"
+            value={password}
+            name="Password"
+            onChange={(event) => setPassword(event.target.value)}
+          />
+        </div>
+        <button type="submit">login</button>
+      </form>
       <div>
         <button onClick={() => setShowAll(!showAll)}>
           show {showAll ? "important" : "all"}
