@@ -116,7 +116,14 @@ const App = () => {
     <div>
       <h1>Notes</h1>
       {errorMessage ? <Notification message={errorMessage} /> : <></>}
-      {loginForm()}{" "}
+      {user === null ? (
+        loginForm()
+      ) : (
+        <div>
+          <p>Welcome {user.name}, below are your notes</p>
+          {noteForm()}
+        </div>
+      )}
       <div>
         <button onClick={() => setShowAll(!showAll)}>
           show {showAll ? "important" : "all"}
@@ -131,7 +138,6 @@ const App = () => {
           />
         ))}
       </ul>
-      {noteForm()}
       <Footer />
     </div>
   );
