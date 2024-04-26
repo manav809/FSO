@@ -45,6 +45,15 @@ const App = () => {
     });
   }, []);
 
+  useEffect(() => {
+    const loggedInUser = window.localStorage.getItem("logged_user");
+    if (loggedInUser) {
+      const user = JSON.parse(loggedInUser);
+      setUser(user);
+      notesService.setToken(user.token);
+    }
+  });
+
   const addNote = (event) => {
     event.preventDefault();
     console.log("button clicked", event.target);
@@ -70,6 +79,9 @@ const App = () => {
         username,
         password,
       });
+
+      window.localStorage.setItem("logged_user", JSON.stringify(user));
+
       notesService.setToken(user.token);
       setUser(user);
       setUsername("");
