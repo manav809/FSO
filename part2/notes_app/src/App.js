@@ -40,9 +40,7 @@ const App = () => {
     : notes.filter((note) => note.important === true);
 
   useEffect(() => {
-    console.log("effect");
     notesService.getAll().then((initialNotes) => {
-      console.log("promise fulfilled");
       setNotes(initialNotes);
     });
   }, []);
@@ -72,6 +70,7 @@ const App = () => {
         username,
         password,
       });
+      notesService.setToken(user.token);
       setUser(user);
       setUsername("");
       setPassword("");
