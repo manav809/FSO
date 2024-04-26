@@ -105,6 +105,13 @@ const App = () => {
       <button type="submit">login</button>
     </form>
   );
+
+  const noteForm = () => (
+    <form onSubmit={addNote}>
+      <input value={newNote} onChange={handleNoteChange} />
+      <button type="submit">save</button>
+    </form>
+  );
   return (
     <div>
       <h1>Notes</h1>
@@ -124,10 +131,7 @@ const App = () => {
           />
         ))}
       </ul>
-      <form onSubmit={addNote}>
-        <input value={newNote} onChange={handleNoteChange} />
-        <button type="submit">save</button>
-      </form>
+      {noteForm()}
       <Footer />
     </div>
   );
