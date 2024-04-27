@@ -13,6 +13,14 @@ const App = () => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
   }, []);
 
+  useEffect(() => {
+    const loggedInUser = window.localStorage.getItem("logged_user");
+    if (loggedInUser) {
+      const user = JSON.parse(loggedInUser);
+      setUser(user);
+    }
+  }, []);
+
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
@@ -20,6 +28,9 @@ const App = () => {
         username,
         password,
       });
+
+      window.localStorage.setItem("logged_user", JSON.stringify(user));
+
       setUser(user);
       setUsername("");
       setPassword("");
@@ -27,11 +38,15 @@ const App = () => {
       console.log("Some Error");
     }
   };
-
+  const handleLogout = async () => {
+    setUser(null);
+    window.localStorage.clear();
+  };
   return (
     <div>
       <h2>blogs</h2>
       {!user ? <p>Please Log In</p> : <p>{user.name} Logged In</p>}
+      <button onClick={handleLogout}>logout</button>
       {!user ? (
         <form onSubmit={handleLogin}>
           <div>
