@@ -13,7 +13,6 @@ blogRouter.get("/", (req, res) => {
 
 blogRouter.post("/", async (req, res) => {
   const body = req.body;
-
   if (!req.user.id) {
     return res.status(401).json({ error: "token invalid" });
   }
