@@ -40,11 +40,14 @@ const tokenExtractor = (req, res, next) => {
 
 const userExtractor = (req, res, next) => {
   const authorization = req.get("authorization");
-
+  console.log(authorization)
   if (authorization && authorization.startsWith("Bearer ", "")) {
     req.token = authorization.replace("Bearer ", "");
+    console.log(req.token);
+
     const user = jwt.verify(req.token, process.env.SECRET);
     req.user = user;
+    console.log(user)
   } else {
     req.token = null;
     req.user = null;
