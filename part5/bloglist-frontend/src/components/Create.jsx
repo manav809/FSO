@@ -1,7 +1,14 @@
 import { useState } from "react";
 import blogService from "../services/blogs";
 
-const Create = ({ setBlogs, blogs, setCreateToggle, createToggle }) => {
+const Create = ({
+  setBlogs,
+  blogs,
+  setCreateToggle,
+  createToggle,
+  setNotification,
+  setAlertColor,
+}) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
@@ -16,8 +23,20 @@ const Create = ({ setBlogs, blogs, setCreateToggle, createToggle }) => {
     };
     blogService.create(blogObject).then((createdBlog) => {
       console.log(createdBlog);
-      setCreateToggle(!createToggle)
+      setCreateToggle(!createToggle);
       setBlogs(blogs.concat(createdBlog));
+      setAlertColor("added");
+      setNotification(`Added ${title} by ${author}`);
+      setTimeout(() => {
+        setNotification(null);
+      }, 5000);
+    }).catch(() => {
+      setAlertColor("deleted");
+      setNotification("Check Fields");
+      setTimeout(() => {
+        setNotification(null);
+      }, 5000);
+    }).finally(() => {
       setTitle("");
       setAuthor("");
       setUrl("");
