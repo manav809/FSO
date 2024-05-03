@@ -4,6 +4,7 @@ import notesService from "./services/notes";
 import Notification from "./components/Notification";
 import Footer from "./components/Footer";
 import loginService from "./services/login";
+import LoginForm from "./components/LoginForm";
 
 const App = () => {
   const [notes, setNotes] = useState([]);
@@ -13,6 +14,7 @@ const App = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
+  const [loginVisible, setLoginVisible] = useState(false);
 
   const toggleImportanceOf = (id) => {
     console.log("importance of " + id + " needs to be toggled");
@@ -52,7 +54,7 @@ const App = () => {
       setUser(user);
       notesService.setToken(user.token);
     }
-  });
+  }, []);
 
   const addNote = (event) => {
     event.preventDefault();
@@ -93,29 +95,30 @@ const App = () => {
       }, 5000);
     }
   };
-  const loginForm = () => (
-    <form onSubmit={handleLogin}>
+  const loginForm = () => {
+    const hideWhenVisible = { display: loginVisible ? "none" : "" };
+    const showWhenVisible = { display: loginVisible ? "" : "none" };
+
+    return (
       <div>
-        username{" "}
-        <input
-          type="text"
-          value={username}
-          name="Username"
-          onChange={(event) => setUsername(event.target.value)}
-        />
+        <div style={showWhenVisible}>
+          <LoginForm
+            username={username}
+            password={password}
+            setUsername={setUsername}
+            setPassword={setPassword}
+            handleLogin={handleLogin}
+          />
+        </div>
+        <div style={hideWhenVisible}>
+          <button onClick={() => setLoginVisible(true)}>log in</button>
+        </div>
+        <div>
+          <button onClick={() => setLoginVisible(false)}> cacel</button>
+        </div>
       </div>
-      <div>
-        password{" "}
-        <input
-          type="text"
-          value={password}
-          name="Password"
-          onChange={(event) => setPassword(event.target.value)}
-        />
-      </div>
-      <button type="submit">login</button>
-    </form>
-  );
+    );
+  };
 
   const noteForm = () => (
     <form onSubmit={addNote}>
