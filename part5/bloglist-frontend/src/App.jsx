@@ -4,6 +4,7 @@ import blogService from "./services/blogs";
 import loginService from "./services/login";
 import Create from "./components/Create";
 import axios from "axios";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -11,6 +12,9 @@ const App = () => {
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
   const [createToggle, setCreateToggle] = useState(false);
+  const [notification, setNotification] = useState(null);
+  const [alertColor, setAlertColor] = useState("");
+
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
   }, [createToggle]);
@@ -33,12 +37,20 @@ const App = () => {
       });
       blogService.setToken(user.token);
       window.localStorage.setItem("logged_user", JSON.stringify(user));
-
       setUser(user);
       setUsername("");
       setPassword("");
+      setAlertColor("added");
+      setNotification(`${user.username} Successfully Logged In!!!`);
+      setTimeout(() => {
+        setNotification(null);
+      }, 5000);
     } catch (exception) {
-      console.log("Some Error");
+      setAlertColor("deleted");
+      setNotification("Check Username and/or Password!!!");
+      setTimeout(() => {
+        setNotification(null);
+      }, 5000);
     }
   };
   const handleLogout = async () => {
@@ -50,43 +62,54 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      {!user ? <p>Please Log In</p> : <p>{user.name} Logged In</p>}
-      {user ? <button onClick={handleLogout}>logout</button> : null}
-      {!user ? (
-        <form onSubmit={handleLogin}>
-          <div>
-            username{" "}
-            <input
-              type="text"
-              value={username}
-              name="Username"
-              onChange={(event) => setUsername(event.target.value)}
-            />
-          </div>
-          <div>
-            password{" "}
-            <input
-              type="text"
-              value={password}
-              name="Password"
-              onChange={(event) => setPassword(event.target.value)}
-            />
-          </div>
-          <button type="submit">login</button>
-        </form>
+      {notification ? (
+        <Notification notification={notification} alertColor={alertColor} />
       ) : (
-        <div>
+        <></>
+      )}
+      {!user ? (
+        <>
+          <p>Please Log In</p>
+          <form onSubmit={handleLogin}>
+            <div>
+              username{" "}
+              <input
+                type="text"
+                value={username}
+                name="Username"
+                onChange={(event) => setUsername(event.target.value)}
+              />
+            </div>
+            <div>
+              password{" "}
+              <input
+                type="text"
+                value={password}
+                name="Password"
+                onChange={(event) => setPassword(event.target.value)}
+              />
+            </div>
+            <button type="submit">login</button>
+          </form>
+        </>
+      ) : (
+        <>
+          <p>{user.name} Logged In</p>
+          <button onClick={handleLogout}>logout</button>
           <Create
             setBlogs={setBlogs}
             blogs={blogs}
             setCreateToggle={setCreateToggle}
             createToggle={createToggle}
+            setAlertColor={setAlertColor}
+            setNotification={setNotification}
           />
           {blogs.map((blog) => (
             <Blog key={blog.id} blog={blog} />
           ))}
-        </div>
+        </>
       )}
+      (
     </div>
   );
 };
