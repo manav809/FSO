@@ -5,6 +5,7 @@ import Notification from "./components/Notification";
 import Footer from "./components/Footer";
 import loginService from "./services/login";
 import LoginForm from "./components/LoginForm";
+import Togglable from "./components/Togglable";
 
 const App = () => {
   const [notes, setNotes] = useState([]);
@@ -100,23 +101,15 @@ const App = () => {
     const showWhenVisible = { display: loginVisible ? "" : "none" };
 
     return (
-      <div>
-        <div style={showWhenVisible}>
-          <LoginForm
-            username={username}
-            password={password}
-            setUsername={setUsername}
-            setPassword={setPassword}
-            handleLogin={handleLogin}
-          />
-        </div>
-        <div style={hideWhenVisible}>
-          <button onClick={() => setLoginVisible(true)}>log in</button>
-        </div>
-        <div>
-          <button onClick={() => setLoginVisible(false)}> cacel</button>
-        </div>
-      </div>
+      <Togglable buttonLabel="login">
+        <LoginForm
+          username={username}
+          password={password}
+          setUsername={setUsername}
+          setPassword={setPassword}
+          handleLogin={handleLogin}
+        />
+      </Togglable>
     );
   };
 
