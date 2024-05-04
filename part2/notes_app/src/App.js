@@ -6,6 +6,7 @@ import Footer from "./components/Footer";
 import loginService from "./services/login";
 import LoginForm from "./components/LoginForm";
 import Togglable from "./components/Togglable";
+import NoteForm from "./components/NoteForm";
 
 const App = () => {
   const [notes, setNotes] = useState([]);
@@ -97,9 +98,6 @@ const App = () => {
     }
   };
   const loginForm = () => {
-    const hideWhenVisible = { display: loginVisible ? "none" : "" };
-    const showWhenVisible = { display: loginVisible ? "" : "none" };
-
     return (
       <Togglable buttonLabel="login">
         <LoginForm
@@ -113,12 +111,18 @@ const App = () => {
     );
   };
 
-  const noteForm = () => (
-    <form onSubmit={addNote}>
-      <input value={newNote} onChange={handleNoteChange} />
-      <button type="submit">save</button>
-    </form>
-  );
+  const noteForm = () => {
+    return (
+      <Togglable buttonLabel="new note">
+        <NoteForm
+          addNote={addNote}
+          newNote={newNote}
+          handleNoteChange={handleNoteChange}
+        />
+      </Togglable>
+    );
+  };
+
   return (
     <div>
       <h1>Notes</h1>
