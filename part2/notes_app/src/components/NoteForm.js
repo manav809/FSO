@@ -1,20 +1,11 @@
-import notesService from "../services/notes";
 import { useState } from "react";
 
-const NoteForm = ({ notes, setNotes }) => {
+const NoteForm = ({ addNote }) => {
   const [newNote, setNewNote] = useState("a new note...");
 
-  const addNote = (event) => {
-    event.preventDefault();
-    console.log("button clicked", event.target);
-    const noteObject = {
-      content: newNote,
-      important: Math.random() < 0.5,
-    };
-    notesService.create(noteObject).then((createdNote) => {
-      setNotes(notes.concat(createdNote));
-      setNewNote("");
-    });
+  const handleSubmit = (event) => {
+    addNote(event, newNote);
+    setNewNote("")
   };
 
   const handleNoteChange = (event) => {
@@ -25,7 +16,7 @@ const NoteForm = ({ notes, setNotes }) => {
     <div>
       <h2>Create a new note</h2>
 
-      <form onSubmit={addNote}>
+      <form onSubmit={handleSubmit}>
         <input value={newNote} onChange={handleNoteChange} />
         <button type="submit">save</button>
       </form>

@@ -1,5 +1,5 @@
 import Note from "./components/Note";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef  } from "react";
 import notesService from "./services/notes";
 import Notification from "./components/Notification";
 import Footer from "./components/Footer";
@@ -15,6 +15,8 @@ const App = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
+
+  const noteFormRef = useRef()
 
   const toggleImportanceOf = (id) => {
     console.log("importance of " + id + " needs to be toggled");
@@ -56,6 +58,18 @@ const App = () => {
     }
   }, []);
 
+  const addNote = (event, newNote) => {
+    noteFormRef.current.toggleVisibility()
+    event.preventDefault();
+    console.log("button clicked", event.target);
+    const noteObject = {
+      content: newNote,
+      important: Math.random() < 0.5,
+    };
+    notesService.create(noteObject).then((createdNote) => {
+      setNotes(notes.concat(createdNote));
+    });
+  };
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -95,10 +109,9 @@ const App = () => {
 
   const noteForm = () => {
     return (
-      <Togglable buttonLabel="new note">
+      <Togglable buttonLabel="new note" ref={noteFormRef}>
         <NoteForm
-          notes={notes}
-          setNotes={setNotes}
+          addNote={addNote}
         />
       </Togglable>
     );
