@@ -1,6 +1,7 @@
 import { useState } from "react";
+import blogService from "../services/blogs";
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, blogs, createToggle, setCreateToggle, setBlogs }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -15,6 +16,16 @@ const Blog = ({ blog }) => {
     setExpand(!expand);
   };
   
+  const increment = () => {
+    const BLOG = blogs.find((BLOG) => BLOG.id === blog.id)
+    BLOG.likes += 1
+    blogService.update(blog.id, BLOG).then((updated) => {
+      setBlogs(blogs.map((n) => n.id != blog.id ? n : updated))
+      setCreateToggle(!createToggle )
+    })
+  }
+
+
   const label = expand ? "hide" : "view"
   return (
     <div style={blogStyle}>
@@ -23,7 +34,7 @@ const Blog = ({ blog }) => {
       {expand ? (
         <>
           <p>{blog.url}</p>
-          <p>likes {blog.likes} <button>likes</button></p>
+          <p>likes {blog.likes} <button onClick={increment}>likes</button></p>
           <p>{blog.author?.name} </p>
         </>
       ) : (
