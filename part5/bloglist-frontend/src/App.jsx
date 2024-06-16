@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Blog from "./components/Blog";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 import Create from "./components/Create";
 import axios from "axios";
 import Notification from "./components/Notification";
+import Toggleable from "./components/Toggleable";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -14,6 +15,8 @@ const App = () => {
   const [createToggle, setCreateToggle] = useState(false);
   const [notification, setNotification] = useState(null);
   const [alertColor, setAlertColor] = useState("");
+
+  const blogFormRef = useRef();
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -59,6 +62,36 @@ const App = () => {
     localStorage.removeItem("logged_user");
     axios.defaults.headers.common["Authorization"] = null;
   };
+
+  const handleCreate = (event, title, author, url) => {
+    event.preventDefault();
+    console.log("submitted");
+    const blogObject = {
+      title,
+      author,
+      url,
+    };
+    blogService
+      .create(blogObject)
+      .then((createdBlog) => {
+        setCreateToggle(!createToggle)
+        setBlogs(blogs.concat(createdBlog));
+        setAlertColor("added");
+        setNotification(`Added ${title} by ${author}`);
+        setTimeout(() => {
+          setNotification(null);
+        }, 5000);
+        blogFormRef.current.toggleVisiblity();
+      })
+      .catch((e) => {
+        console.log(e)
+        setAlertColor("deleted");
+        setNotification("Check Fields");
+        setTimeout(() => {
+          setNotification(null);
+        }, 5000);
+      });
+  };
   return (
     <div>
       <h2>blogs</h2>
@@ -96,20 +129,15 @@ const App = () => {
         <>
           <p>{user.name} Logged In</p>
           <button onClick={handleLogout}>logout</button>
-          <Create
-            setBlogs={setBlogs}
-            blogs={blogs}
-            setCreateToggle={setCreateToggle}
-            createToggle={createToggle}
-            setAlertColor={setAlertColor}
-            setNotification={setNotification}
-          />
+          <Toggleable buttonLabel="create new blog" ref={blogFormRef}>
+            <Create handleCreate={handleCreate} />
+          </Toggleable>
+
           {blogs.map((blog) => (
             <Blog key={blog.id} blog={blog} />
           ))}
         </>
       )}
-      (
     </div>
   );
 };

@@ -1,50 +1,18 @@
 import { useState } from "react";
-import blogService from "../services/blogs";
 
 const Create = ({
-  setBlogs,
-  blogs,
-  setCreateToggle,
-  createToggle,
-  setNotification,
-  setAlertColor,
+  handleCreate
 }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
 
-  const handleCreate = async (event) => {
-    event.preventDefault();
-    console.log("submitted");
-    const blogObject = {
-      title,
-      author,
-      url,
-    };
-    blogService.create(blogObject).then((createdBlog) => {
-      console.log(createdBlog);
-      setCreateToggle(!createToggle);
-      setBlogs(blogs.concat(createdBlog));
-      setAlertColor("added");
-      setNotification(`Added ${title} by ${author}`);
-      setTimeout(() => {
-        setNotification(null);
-      }, 5000);
-    }).catch(() => {
-      setAlertColor("deleted");
-      setNotification("Check Fields");
-      setTimeout(() => {
-        setNotification(null);
-      }, 5000);
-    }).finally(() => {
-      setTitle("");
-      setAuthor("");
-      setUrl("");
-    });
-  };
+  const handleSubmit = (event) => {
+    handleCreate(event, title, author, url)
+  }
 
   return (
-    <form onSubmit={handleCreate}>
+    <form onSubmit={handleSubmit}>
       <div>
         title:{" "}
         <input
