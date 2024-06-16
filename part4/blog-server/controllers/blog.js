@@ -55,13 +55,12 @@ blogRouter.delete("/:id", async (req, res, next) => {
     return res.status(401).json({ error: "mismatch authors" });
   }
   Blog.deleteOne({ _id: id })
-    .then(() => res.sendStatus(204).json({ success: "Remove Blog" }).end())
+    .then(() => res.json({ success: "Remove Blog" }))
     .catch((error) => next(error));
 });
 
 blogRouter.put("/:id", (req, res, next) => {
   const id = req.params.id;
-  console.log(id)
   const { likes } = req.body;
   Blog.findByIdAndUpdate(
     { _id: id },

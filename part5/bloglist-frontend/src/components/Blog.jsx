@@ -15,27 +15,36 @@ const Blog = ({ blog, blogs, createToggle, setCreateToggle, setBlogs }) => {
     event.preventDefault();
     setExpand(!expand);
   };
-  
+
   const increment = () => {
-    const BLOG = blogs.find((BLOG) => BLOG.id === blog.id)
-    BLOG.likes += 1
+    const BLOG = blogs.find((BLOG) => BLOG.id === blog.id);
+    BLOG.likes += 1;
     blogService.update(blog.id, BLOG).then((updated) => {
-      setBlogs(blogs.map((n) => n.id != blog.id ? n : updated))
-      setCreateToggle(!createToggle )
-    })
-  }
+      setBlogs(blogs.map((n) => (n.id != blog.id ? n : updated)));
+      setCreateToggle(!createToggle);
+    });
+  };
 
+  const deleteBlog = () => {
+    if (window.confirm("Are you sure you want to delet")) {
+      blogService.deleteBlog(blog.id).then(() => {
+        setBlogs(blogs.filter((b) => b.id !== blog.id));
+      });
+    }
+  };
 
-  const label = expand ? "hide" : "view"
+  const label = expand ? "hide" : "view";
   return (
     <div style={blogStyle}>
-      {blog.title} {" "}
-      <button onClick={expandMore}>{label}</button>
+      {blog.title} <button onClick={expandMore}>{label}</button>
       {expand ? (
         <>
           <p>{blog.url}</p>
-          <p>likes {blog.likes} <button onClick={increment}>likes</button></p>
-          <p>{blog.author?.name} </p>
+          <p>
+            likes {blog.likes} <button onClick={increment}>likes</button>
+          </p>
+          <p>{blog.author?.name}</p>
+          <button onClick={deleteBlog}>remove</button>
         </>
       ) : (
         <></>
