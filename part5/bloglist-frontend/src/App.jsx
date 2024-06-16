@@ -19,7 +19,10 @@ const App = () => {
   const blogFormRef = useRef();
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
+    blogService.getAll().then((blogs) => {
+      blogs.sort((blog1, blog2) => blog1.likes - blog2.likes)
+      setBlogs(blogs)
+    });
   }, [createToggle]);
 
   useEffect(() => {
