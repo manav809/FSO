@@ -61,6 +61,7 @@ blogRouter.delete("/:id", async (req, res, next) => {
 
 blogRouter.put("/:id", (req, res, next) => {
   const id = req.params.id;
+  console.log(id)
   const { likes } = req.body;
   Blog.findByIdAndUpdate(
     { _id: id },
