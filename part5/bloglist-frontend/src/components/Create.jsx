@@ -1,15 +1,14 @@
 import { useState } from "react";
+import PropTypes from "prop-types";
 
-const Create = ({
-  handleCreate
-}) => {
+const Create = ({ handleCreate }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
 
   const handleSubmit = (event) => {
-    handleCreate(event, title, author, url)
-  }
+    handleCreate(event, title, author, url);
+  };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -43,6 +42,10 @@ const Create = ({
       <button type="submit">create</button>
     </form>
   );
+};
+
+Create.propTypes = {
+  handleCreate: PropTypes.func.isRequired,
 };
 
 export default Create;
