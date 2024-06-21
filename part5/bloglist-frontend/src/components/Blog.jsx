@@ -42,7 +42,7 @@ const Blog = ({ blog, blogs, createToggle, setCreateToggle, setBlogs }) => {
         <>
           <p>{blog.url}</p>
           <p>
-            likes {blog.likes} <button onClick={increment}>likes</button>
+            likes {blog.likes} <button className='like' onClick={increment}>like</button>
           </p>
           <p>{blog.author?.name}</p>
           <button onClick={deleteBlog}>remove</button>
