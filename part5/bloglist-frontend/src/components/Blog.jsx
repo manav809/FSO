@@ -34,6 +34,7 @@ const Blog = ({ blog, blogs, createToggle, setCreateToggle, setBlogs }) => {
   };
 
   const label = expand ? "hide" : "view";
+  console.log(blogs)
   return (
     <div style={blogStyle}>
       {blog.title} <button onClick={expandMore}>{label}</button>
@@ -47,7 +48,7 @@ const Blog = ({ blog, blogs, createToggle, setCreateToggle, setBlogs }) => {
           <button onClick={deleteBlog}>remove</button>
         </>
       ) : (
-        <></>
+        <>Author: {blog.author?.name}</>
       )}
     </div>
   );
