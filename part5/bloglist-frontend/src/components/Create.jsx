@@ -15,6 +15,7 @@ const Create = ({ handleCreate }) => {
       <div>
         title:{" "}
         <input
+          aria-label="title"
           type="text"
           value={title}
           name="Title"
@@ -24,6 +25,7 @@ const Create = ({ handleCreate }) => {
       <div>
         author:{" "}
         <input
+          aria-label="author"
           type="text"
           value={author}
           name="Author"
@@ -33,6 +35,7 @@ const Create = ({ handleCreate }) => {
       <div>
         url:{" "}
         <input
+          aria-label="url"
           type="text"
           value={url}
           name="Url"
