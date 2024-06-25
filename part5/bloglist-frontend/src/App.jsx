@@ -20,8 +20,8 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then((blogs) => {
-      blogs.sort((blog1, blog2) => blog1.likes - blog2.likes)
-      setBlogs(blogs)
+      blogs.sort((blog1, blog2) => blog1.likes - blog2.likes);
+      setBlogs(blogs);
     });
   }, [createToggle]);
 
@@ -77,7 +77,7 @@ const App = () => {
     blogService
       .create(blogObject)
       .then((createdBlog) => {
-        setCreateToggle(!createToggle)
+        setCreateToggle(!createToggle);
         setBlogs(blogs.concat(createdBlog));
         setAlertColor("added");
         setNotification(`Added ${title} by ${author}`);
@@ -87,7 +87,7 @@ const App = () => {
         blogFormRef.current.toggleVisiblity();
       })
       .catch((e) => {
-        console.log(e)
+        console.log(e);
         setAlertColor("deleted");
         setNotification("Check Fields");
         setTimeout(() => {
@@ -110,6 +110,7 @@ const App = () => {
             <div>
               username{" "}
               <input
+                data-testid='username'
                 type="text"
                 value={username}
                 name="Username"
@@ -119,6 +120,7 @@ const App = () => {
             <div>
               password{" "}
               <input
+                data-testid='password'
                 type="text"
                 value={password}
                 name="Password"
@@ -137,7 +139,14 @@ const App = () => {
           </Toggleable>
 
           {blogs.map((blog) => (
-            <Blog key={blog.id} blog={blog} blogs={blogs} createToggle={createToggle} setBlogs={setBlogs} setCreateToggle={setCreateToggle}/>
+            <Blog
+              key={blog.id}
+              blog={blog}
+              blogs={blogs}
+              createToggle={createToggle}
+              setBlogs={setBlogs}
+              setCreateToggle={setCreateToggle}
+            />
           ))}
         </>
       )}
