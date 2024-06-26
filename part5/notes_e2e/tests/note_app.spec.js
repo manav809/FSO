@@ -10,24 +10,24 @@ describe("Note App", () => {
     const locator = await page.getByRole("heading", { name: "Notes" });
     await expect(locator).toBeVisible();
 
-    await expect(page.getByText("Hey Willie")).toBeVisible();
+    await expect(page.getByText("HTML is easy")).toBeVisible();
   });
 
   test("login form can be opened", async ({ page }) => {
     await page.getByRole("button", { name: "login" }).click();
     const textboxes = await page.getByRole('textbox').all()
-    await textboxes[0].fill('vidhi809')
+    await textboxes[0].fill('root')
     await textboxes[1].fill('123')
     await page.getByRole("button", { name: "login" }).click();
 
-    await expect(page.getByText('Welcome Vidhi, below are your notes')).toBeVisible()
+    await expect(page.getByText('Welcome Zyzz, below are your notes')).toBeVisible()
   });
 
   describe("when logged in", () => {
     beforeEach(async ({page}) => {
       await page.getByRole("button", { name: "login" }).click();
       const textboxes = await page.getByRole('textbox').all()
-      await textboxes[0].fill('vidhi809')
+      await textboxes[0].fill('root')
       await textboxes[1].fill('123')
       await page.getByRole("button", { name: "login" }).click();
     })
