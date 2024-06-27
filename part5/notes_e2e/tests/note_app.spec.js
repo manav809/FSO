@@ -22,21 +22,23 @@ describe("Note App", () => {
     await page.goto("http://localhost:3000/");
   });
 
-  test("get started link", async ({ page }) => {
-    const locator = await page.getByRole("heading", { name: "Notes" });
-    await expect(locator).toBeVisible();
-  });
+  describe("Basic Functions", () => {
+    test("get started link", async ({ page }) => {
+      const locator = await page.getByRole("heading", { name: "Notes" });
+      await expect(locator).toBeVisible();
+    });
 
-  test("login form can be opened", async ({ page }) => {
-    await page.getByRole("button", { name: "login" }).click();
-    const textboxes = await page.getByRole("textbox").all();
-    await textboxes[0].fill("root");
-    await textboxes[1].fill("123");
-    await page.getByRole("button", { name: "login" }).click();
+    test("login form can be opened", async ({ page }) => {
+      await page.getByRole("button", { name: "login" }).click();
+      const textboxes = await page.getByRole("textbox").all();
+      await textboxes[0].fill("root");
+      await textboxes[1].fill("123");
+      await page.getByRole("button", { name: "login" }).click();
 
-    await expect(
-      page.getByText("Welcome Root, below are your notes")
-    ).toBeVisible();
+      await expect(
+        page.getByText("Welcome Root, below are your notes")
+      ).toBeVisible();
+    });
   });
 
   describe("when logged in", () => {
@@ -61,7 +63,7 @@ describe("Note App", () => {
       const textboxes = await page.getByRole("textbox").all();
       await textboxes[0].fill("Playwright Testing is not Cool");
       await page.getByRole("button", { name: "save" }).click();
-      
+
       await page.getByRole("button", { name: "make not important" }).click();
       await expect(page.getByText("make important")).toBeVisible();
     });
