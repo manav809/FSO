@@ -6,6 +6,7 @@ const {
   beforeEach,
   request,
 } = require("@playwright/test");
+const { loginWith, createNote } = require("./helper");
 
 describe("Note App", () => {
   beforeEach(async ({ page, request }) => {
@@ -29,11 +30,7 @@ describe("Note App", () => {
     });
 
     test("login form can be opened", async ({ page }) => {
-      await page.getByRole("button", { name: "login" }).click();
-      const textboxes = await page.getByRole("textbox").all();
-      await textboxes[0].fill("root");
-      await textboxes[1].fill("123");
-      await page.getByRole("button", { name: "login" }).click();
+      await loginWith(page, "root", "123");
 
       await expect(
         page.getByText("Welcome Root, below are your notes")
@@ -43,42 +40,28 @@ describe("Note App", () => {
 
   describe("when logged in", () => {
     beforeEach(async ({ page }) => {
-      await page.getByRole("button", { name: "login" }).click();
-      const textboxes = await page.getByRole("textbox").all();
-      await textboxes[0].fill("root");
-      await textboxes[1].fill("123");
-      await page.getByRole("button", { name: "login" }).click();
+      await loginWith(page, "root", "123");
     });
+
     test("note creation", async ({ page }) => {
-      await page.getByRole("button", { name: "new note" }).click();
-      const textboxes = await page.getByRole("textbox").all();
-      await textboxes[0].fill("Playwright Testing is Cool");
-      await page.getByRole("button", { name: "save" }).click();
+      await createNote(page, "Playwright Testing is Cool")
 
       await expect(page.getByText("Playwright Testing is Cool")).toBeVisible();
     });
 
     test("toggle importance", async ({ page }) => {
-      await page.getByRole("button", { name: "new note" }).click();
-      const textboxes = await page.getByRole("textbox").all();
-      await textboxes[0].fill("Playwright Testing is not Cool");
-      await page.getByRole("button", { name: "save" }).click();
+      await createNote(page, "Playwright Testing is not Cool")
 
       await page.getByRole("button", { name: "make not important" }).click();
       await expect(page.getByText("make important")).toBeVisible();
     });
+  });
 
-    describe("failed login", () => {
-      test("failed login displays red banner", async ({ page }) => {
-        await page.getByRole("button", { name: "login" }).click();
-        const textboxes = await page.getByRole("textbox").all();
-        await textboxes[0].fill("root");
-        await textboxes[1].fill("wrong password");
-        await page.getByRole("button", { name: "login" }).click();
-
-        const errorDiv = await page.locator(".error");
-        await expect(errorDiv).toContainText("Wrong Credentials");
-      });
+  describe("failed login", () => {
+    test("failed login displays red banner", async ({ page }) => {
+      await loginWith(page, "root", "wrong");
+      const errorDiv = await page.locator(".error");
+      await expect(errorDiv).toContainText("Wrong Credentials");
     });
   });
 });

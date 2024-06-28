@@ -64,7 +64,7 @@ const App = () => {
     console.log("button clicked", event.target);
     const noteObject = {
       content: newNote,
-      important: Math.random() < 0.5,
+      important: true,
     };
     notesService.create(noteObject).then((createdNote) => {
       setNotes(notes.concat(createdNote));
