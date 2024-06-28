@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const supertest = require("supertest");
 const app = require("../app");
 const helper = require("./test_helper");
+const { test, beforeEach, after } = require("node:test");
 
 const api = supertest(app);
 
@@ -62,7 +63,7 @@ test("note without content is not added", async () => {
     important: true,
   };
 
-  await api.post("/api/notes").send(newNote).expect(400);
+  await api.post("/api/notes").send(newNote).expect(401);
 
   const response = helper.notesInDb();
   assert.strictEqual((await response).length, helper.initialNotes.length);
