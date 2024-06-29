@@ -6,7 +6,7 @@ const {
   describe,
   request,
 } = require("@playwright/test");
-const { loginWith } = require("./helper");
+const { loginWith, createBlog } = require("./helper");
 
 describe("Blog app", () => {
   beforeEach(async ({ page, request }) => {
@@ -45,4 +45,14 @@ describe("Blog app", () => {
       await expect(errorDiv).toContainText("Check Username and/or Password!!!");
     });
   });
+  describe('When logged in', () => {
+    beforeEach(async ({ page }) => {
+      await loginWith(page, "root", "123");
+    })
+  
+    test('a new blog can be created', async ({ page }) => {
+      await createBlog(page, "Hello", "wikipedia.com")
+      await expect(page.getByRole('heading', { name: 'Added Hello by' })).toBeVisible();
+    })
+  })
 });
