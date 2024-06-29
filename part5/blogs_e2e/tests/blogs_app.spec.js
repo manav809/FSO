@@ -54,5 +54,12 @@ describe("Blog app", () => {
       await createBlog(page, "Hello", "wikipedia.com")
       await expect(page.getByRole('heading', { name: 'Added Hello by' })).toBeVisible();
     })
+
+    test('a new view', async ({page}) => {
+      await createBlog(page, "Hello", "wikipedia.com")
+      await page.getByRole("button", { name: "View" }).click();
+      await page.getByRole("button", { name: "like" }).click();
+      await expect(page.getByText('likes 1 like')).toBeVisible();
+    })
   })
 });
