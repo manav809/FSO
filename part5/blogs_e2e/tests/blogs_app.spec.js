@@ -45,21 +45,38 @@ describe("Blog app", () => {
       await expect(errorDiv).toContainText("Check Username and/or Password!!!");
     });
   });
-  describe('When logged in', () => {
+
+  describe("When logged in", () => {
     beforeEach(async ({ page }) => {
       await loginWith(page, "root", "123");
-    })
-  
-    test('a new blog can be created', async ({ page }) => {
-      await createBlog(page, "Hello", "wikipedia.com")
-      await expect(page.getByRole('heading', { name: 'Added Hello by' })).toBeVisible();
-    })
+    });
 
-    test('a new view', async ({page}) => {
-      await createBlog(page, "Hello", "wikipedia.com")
+    test("a new blog can be created", async ({ page }) => {
+      await createBlog(page, "Hello", "wikipedia.com");
+      await expect(
+        page.getByRole("heading", { name: "Added Hello by" })
+      ).toBeVisible();
+    });
+
+    test("a new view", async ({ page }) => {
+      await createBlog(page, "Hello", "wikipedia.com");
       await page.getByRole("button", { name: "View" }).click();
       await page.getByRole("button", { name: "like" }).click();
-      await expect(page.getByText('likes 1 like')).toBeVisible();
-    })
-  })
+      await expect(page.getByText("likes 1 like")).toBeVisible();
+    });
+
+    test("remove note after adding", async ({ page }) => {
+      await createBlog(page, "Hello", "wikipedia.com");
+      await page.getByRole("button", { name: "View" }).click();
+
+      page.on('dialog', dialog => {
+        console.log(dialog.message());
+        dialog.accept();
+      });
+
+      await page.getByRole("button", { name: "remove" }).click();
+
+      await expect(page.locator("Hello")).not.toBeVisible();
+    });
+  });
 });
