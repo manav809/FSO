@@ -146,6 +146,7 @@ const App = () => {
               createToggle={createToggle}
               setBlogs={setBlogs}
               setCreateToggle={setCreateToggle}
+              user={user}
             />
           ))}
         </>

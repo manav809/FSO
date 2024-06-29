@@ -1,7 +1,7 @@
 import { useState } from "react";
 import blogService from "../services/blogs";
 
-const Blog = ({ blog, blogs, createToggle, setCreateToggle, setBlogs }) => {
+const Blog = ({ blog, blogs, createToggle, setCreateToggle, setBlogs, user }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -26,7 +26,7 @@ const Blog = ({ blog, blogs, createToggle, setCreateToggle, setBlogs }) => {
   };
 
   const deleteBlog = () => {
-    if (window.confirm("Are you sure you want to delet")) {
+    if (window.confirm("Are you sure you want to delete")) {
       blogService.deleteBlog(blog.id).then(() => {
         setBlogs(blogs.filter((b) => b.id !== blog.id));
       });
@@ -45,7 +45,7 @@ const Blog = ({ blog, blogs, createToggle, setCreateToggle, setBlogs }) => {
             likes {blog.likes} <button className='like' onClick={increment}>like</button>
           </p>
           <p>{blog.author?.name}</p>
-          <button onClick={deleteBlog}>remove</button>
+          {user.name === blog.author?.name ? <button onClick={deleteBlog}>remove</button> : <></>}
         </>
       ) : (
         <>Author: {blog.author?.name}</>

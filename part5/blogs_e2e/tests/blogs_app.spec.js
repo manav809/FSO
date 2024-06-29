@@ -19,6 +19,14 @@ describe("Blog app", () => {
         password: "123",
       },
     });
+
+    await request.post("http://localhost:3003/api/users", {
+      data: {
+        username: "root_2",
+        name: "root_2",
+        password: "123",
+      },
+    });
     await page.goto("http://localhost:5173");
   });
 
@@ -69,7 +77,7 @@ describe("Blog app", () => {
       await createBlog(page, "Hello", "wikipedia.com");
       await page.getByRole("button", { name: "View" }).click();
 
-      page.on('dialog', dialog => {
+      page.on("dialog", (dialog) => {
         console.log(dialog.message());
         dialog.accept();
       });
@@ -77,6 +85,15 @@ describe("Blog app", () => {
       await page.getByRole("button", { name: "remove" }).click();
 
       await expect(page.locator("Hello")).not.toBeVisible();
+    });
+
+    test("only see delete button for my blog", async ({ page }) => {
+      await createBlog(page, "Hello", "wikipedia.com");
+      await page.getByRole("button", { name: "logout" }).click();
+      await loginWith(page, "root_2", "123");
+      await page.getByRole("button", { name: "View" }).click();
+      const removeButton = await page.$("button[name=remove]");
+      expect(removeButton).toBeNull(); 
     });
   });
 });
