@@ -36,7 +36,7 @@ const Blog = ({ blog, blogs, createToggle, setCreateToggle, setBlogs, user }) =>
   const label = expand ? "hide" : "view";
   console.log(blogs)
   return (
-    <div style={blogStyle}>
+    <div style={blogStyle} className={blog.title}>
       {blog.title} <button onClick={expandMore}>{label}</button>
       {expand ? (
         <>

@@ -110,7 +110,7 @@ const App = () => {
             <div>
               username{" "}
               <input
-                data-testid='username'
+                data-testid="username"
                 type="text"
                 value={username}
                 name="Username"
@@ -120,7 +120,7 @@ const App = () => {
             <div>
               password{" "}
               <input
-                data-testid='password'
+                data-testid="password"
                 type="text"
                 value={password}
                 name="Password"
@@ -137,18 +137,19 @@ const App = () => {
           <Toggleable buttonLabel="create new blog" ref={blogFormRef}>
             <Create handleCreate={handleCreate} />
           </Toggleable>
-
-          {blogs.map((blog) => (
-            <Blog
-              key={blog.id}
-              blog={blog}
-              blogs={blogs}
-              createToggle={createToggle}
-              setBlogs={setBlogs}
-              setCreateToggle={setCreateToggle}
-              user={user}
-            />
-          ))}
+          <div className='blogs'>
+            {blogs.map((blog) => (
+              <Blog
+                key={blog.id}
+                blog={blog}
+                blogs={blogs}
+                createToggle={createToggle}
+                setBlogs={setBlogs}
+                setCreateToggle={setCreateToggle}
+                user={user}
+              />
+            ))}
+          </div>
         </>
       )}
     </div>
