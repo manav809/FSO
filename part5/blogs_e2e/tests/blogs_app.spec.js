@@ -93,7 +93,28 @@ describe("Blog app", () => {
       await loginWith(page, "root_2", "123");
       await page.getByRole("button", { name: "View" }).click();
       const removeButton = await page.$("button[name=remove]");
-      expect(removeButton).toBeNull(); 
+      expect(removeButton).toBeNull();
+    });
+    describe("upon creating a few blogs", () => {
+      beforeEach(async ({ page }) => {
+        await createBlog(page, "Hello", "wikipedia.com");
+        await createBlog(page, "Hello1", "google.com");
+        await createBlog(page, "Hello2", "facebook.com");
+        const waiter = page.locator(".blogs").last().getByText("Hello2");
+
+        await expect(waiter).toBeVisible();
+        await page.waitForSelector(".blogs");
+      });
+      test("upon liking, the blog should be re-arranged", async ({ page }) => {
+        await page.getByText('Hello1').getByRole('button', { name: 'view' }).click()
+        await page.getByRole("button", { name: "like" }).click();
+        await page.waitForSelector('text=likes 1');
+        await page.getByRole("button", { name: "hide" }).click();
+
+        const last = page.locator(".blogs").last().getByText("Hello1");
+
+        await expect(last).toBeVisible();
+      });
     });
   });
 });

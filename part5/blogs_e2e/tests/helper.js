@@ -11,7 +11,6 @@ const createBlog = async (page, title, url) => {
   const myValue = await page.evaluate(() => {
     return JSON.parse(localStorage.getItem("logged_user"));
   });
-  console.log(typeof(myValue));
   await textboxes[0].fill(title);
   await textboxes[1].fill(myValue.id);
   await textboxes[2].fill(url);
