@@ -9,6 +9,7 @@ const store = createStore(reducer);
 const App = () => {
   return (
     <div>
+      <h3>Unicafe Redux Edition</h3>
       <button onClick={(e) => store.dispatch({ type: "GOOD" })}>good</button>
       <button onClick={(e) => store.dispatch({ type: "OK" })}>ok</button>
       <button onClick={(e) => store.dispatch({ type: "BAD" })}>bad</button>
