@@ -1,12 +1,14 @@
-import { useState } from "react";
+import NewNote from "./components/NewNote";
+import Notes from "./components/Notes";
 
-function App() {
-
+const App = () => {
   return (
-    <>
-      <h1>Vite + React</h1>
-    </>
+    <div>
+      <NewNote />
+      <Notes />
+    </div>
   );
-}
+};
+
 
 export default App;
