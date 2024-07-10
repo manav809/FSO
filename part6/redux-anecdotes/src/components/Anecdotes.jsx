@@ -3,7 +3,16 @@ import { voteFor } from "../reducers/actions";
 
 const Anecdotes = () => {
   const dispatch = useDispatch();
-  const anecdotes = useSelector((state) => state);
+  const anecdotes = useSelector(({anecdotes, filter}) => {
+    if (filter === "") {
+      console.log(anecdotes)
+      return anecdotes;
+    } else {
+      return anecdotes.filter((anecdote) =>
+        anecdote.content.includes(filter)
+      );
+    }
+  });
 
   const vote = (id) => {
     dispatch(voteFor(id));
