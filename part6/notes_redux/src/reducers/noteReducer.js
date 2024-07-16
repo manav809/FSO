@@ -27,13 +27,12 @@ const noteSlice = createSlice({
       });
     },
     toggleImportanceOf(state, action) {
-      const id = action.payload.id;
+      const id = action.payload;
       const noteToChange = state.find((n) => n.id === id);
       const changedNote = {
         ...noteToChange,
         important: !noteToChange.important,
       };
-
       return state.map((note) => (note.id != id ? note : changedNote));
     },
   },
